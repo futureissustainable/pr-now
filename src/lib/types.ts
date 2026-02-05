@@ -1,8 +1,10 @@
 export type AIProvider = 'anthropic' | 'openai' | 'google';
+export type AIAuthMethod = 'apiKey' | 'oauthToken';
 
 export interface AIConfig {
   provider: AIProvider;
   apiKey: string;
+  authMethod?: AIAuthMethod;
   model?: string;
 }
 

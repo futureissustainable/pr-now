@@ -2,12 +2,15 @@ import type { AIConfig, ProjectProfile, Outlet, Contact, OutreachEmail } from '.
 
 // AI provider API calls
 async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string): Promise<string> {
+  const authMethod = config.authMethod || 'apiKey';
+
   if (config.provider === 'anthropic') {
     const res = await fetch('/api/ai/anthropic', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         apiKey: config.apiKey,
+        authMethod,
         model: config.model || 'claude-sonnet-4-20250514',
         system: systemPrompt,
         prompt: userPrompt,
@@ -24,6 +27,7 @@ async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         apiKey: config.apiKey,
+        authMethod,
         model: config.model || 'gpt-4o',
         system: systemPrompt,
         prompt: userPrompt,
@@ -40,6 +44,7 @@ async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         apiKey: config.apiKey,
+        authMethod,
         model: config.model || 'gemini-2.0-flash',
         prompt: `${systemPrompt}\n\n${userPrompt}`,
       }),
