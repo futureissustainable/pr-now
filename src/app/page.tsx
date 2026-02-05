@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Lightning,
@@ -21,9 +21,27 @@ const heroVariants = [
   { id: 'v5', label: 'Halftone', desc: 'Dot matrix' },
 ] as const;
 
+const palettes = [
+  { id: 'warm', label: 'Warm Parchment', swatch: '#9c4a2e' },
+  { id: 'indigo', label: 'Indigo Night', swatch: '#4a4e69' },
+  { id: 'tuscan', label: 'Tuscan Sun', swatch: '#d4a82a' },
+] as const;
+
 export default function LandingPage() {
   const seedDemoData = useStore((s) => s.seedDemoData);
   const [heroVariant, setHeroVariant] = useState<string>('v1');
+  const [palette, setPalette] = useState<string>('warm');
+
+  useEffect(() => {
+    if (palette === 'warm') {
+      delete document.documentElement.dataset.palette;
+    } else {
+      document.documentElement.dataset.palette = palette;
+    }
+    return () => {
+      delete document.documentElement.dataset.palette;
+    };
+  }, [palette]);
 
   return (
     <div className="grain-overlay" style={{ minHeight: '100vh', background: 'var(--linen)' }}>
@@ -150,6 +168,55 @@ export default function LandingPage() {
               {v.label}
             </button>
           ))}
+
+          {/* Palette switcher */}
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '9px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--text-tertiary)',
+            paddingTop: 'var(--space-2)',
+            paddingBottom: 'var(--space-1)',
+            borderTop: '1px solid var(--border-subtle)',
+            marginTop: 'var(--space-1)',
+          }}>
+            Palette
+          </span>
+          {palettes.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => setPalette(p.id)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-1) var(--space-2)',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                background: palette === p.id ? 'var(--accent)' : 'transparent',
+                color: palette === p.id ? 'var(--text-inverse)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                fontWeight: 600,
+                textAlign: 'left',
+                transition: 'all 100ms ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span style={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: p.swatch,
+                flexShrink: 0,
+                border: palette === p.id ? '1.5px solid var(--text-inverse)' : '1.5px solid transparent',
+              }} />
+              {p.label}
+            </button>
+          ))}
         </div>
 
         <div
@@ -196,7 +263,7 @@ export default function LandingPage() {
               color: 'var(--accent)',
               textDecorationLine: 'underline',
               textDecorationStyle: 'wavy',
-              textDecorationColor: 'rgba(156, 74, 46, 0.3)',
+              textDecorationColor: 'rgba(var(--hero-accent), 0.3)',
               textUnderlineOffset: '6px',
             }}>on autopilot</em>
           </h1>
