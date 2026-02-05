@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   Lightning,
@@ -12,8 +13,17 @@ import {
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
+const heroVariants = [
+  { id: 'v1', label: 'Warm Ember', desc: 'Radial terracotta bloom' },
+  { id: 'v2', label: 'Blueprint', desc: 'Architectural grid' },
+  { id: 'v3', label: 'Topographic', desc: 'Contour rings' },
+  { id: 'v4', label: 'Editorial', desc: 'Diagonal stripes' },
+  { id: 'v5', label: 'Halftone', desc: 'Dot matrix' },
+] as const;
+
 export default function LandingPage() {
   const seedDemoData = useStore((s) => s.seedDemoData);
+  const [heroVariant, setHeroVariant] = useState<string>('v1');
 
   return (
     <div className="grain-overlay" style={{ minHeight: '100vh', background: 'var(--linen)' }}>
@@ -76,20 +86,71 @@ export default function LandingPage() {
           overflow: 'hidden',
         }}
       >
-        {/* Atmospheric radial glow */}
-        <div className="hero-glow" />
+        {/* Switchable hero background */}
+        <div className={`hero-bg-${heroVariant}`} />
 
-        {/* Decorative ruled notebook lines */}
-        <div className="ruled-lines" />
-
-        {/* Decorative grid lines with animated reveal */}
-        <div style={{ position: 'absolute', top: 0, left: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5, transformOrigin: 'top', animation: 'drawLine 1s var(--ease-out) 200ms both' }} />
-        <div style={{ position: 'absolute', top: 0, right: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5, transformOrigin: 'top', animation: 'drawLine 1s var(--ease-out) 400ms both' }} />
-        <div style={{ position: 'absolute', top: 0, left: '50%', width: 1, height: '100%', background: 'var(--bone)', opacity: 0.2, transformOrigin: 'top', animation: 'drawLine 1.2s var(--ease-out) 600ms both' }} />
-
-        {/* Diagonal accent stripes */}
-        <div className="accent-stripe" style={{ top: '15%', right: '5%' }} />
-        <div className="accent-stripe" style={{ bottom: '20%', left: '3%', width: 120 }} />
+        {/* Hero variant switcher — fixed bottom-right */}
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 'var(--space-5)',
+            right: 'var(--space-5)',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-2)',
+            background: 'var(--bg-surface-raised)',
+            border: '2px solid var(--border-strong)',
+            borderRadius: 'var(--radius-md)',
+            padding: 'var(--space-3)',
+            boxShadow: '4px 4px 0 var(--border-strong)',
+          }}
+        >
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '9px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--text-tertiary)',
+            paddingBottom: 'var(--space-1)',
+            borderBottom: '1px solid var(--border-subtle)',
+          }}>
+            Hero BG
+          </span>
+          {heroVariants.map((v) => (
+            <button
+              key={v.id}
+              onClick={() => setHeroVariant(v.id)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-1) var(--space-2)',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                background: heroVariant === v.id ? 'var(--accent)' : 'transparent',
+                color: heroVariant === v.id ? 'var(--text-inverse)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                fontWeight: 600,
+                textAlign: 'left',
+                transition: 'all 100ms ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span style={{
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                background: heroVariant === v.id ? 'var(--text-inverse)' : 'var(--border-default)',
+                flexShrink: 0,
+              }} />
+              {v.label}
+            </button>
+          ))}
+        </div>
 
         <div
           className="animate-in"
