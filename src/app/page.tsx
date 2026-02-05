@@ -14,11 +14,11 @@ import {
 import { useStore } from '@/store/useStore';
 
 const heroVariants = [
-  { id: 'v1', label: 'Breathe', desc: 'Pulsing glow' },
-  { id: 'v2', label: 'Drift', desc: 'Orbiting orbs' },
-  { id: 'v3', label: 'Aurora', desc: 'Color shift' },
-  { id: 'v4', label: 'Waves', desc: 'Flowing bands' },
-  { id: 'v5', label: 'Cosmos', desc: 'Particles + rings' },
+  { id: 'v1', label: 'Glow' },
+  { id: 'v2', label: 'Lava' },
+  { id: 'v3', label: 'Aurora' },
+  { id: 'v4', label: 'Spotlights' },
+  { id: 'v5', label: 'Nebula' },
 ] as const;
 
 const palettes = [
@@ -105,29 +105,38 @@ export default function LandingPage() {
         }}
       >
         {/* Switchable animated hero background */}
-        {heroVariant === 'v5' ? (
-          <div className="hero-bg-v5">
-            <span className="hero-bg-v5-orb" />
-            <span className="hero-bg-v5-orb" />
-            <span className="hero-bg-v5-orb" />
-            <span className="hero-bg-v5-orb" />
-            <span className="hero-bg-v5-orb" />
-            <span className="hero-bg-v5-orb" />
+        {heroVariant === 'v1' && <div className="hero-bg-v1" />}
+        {heroVariant === 'v2' && (
+          <div className="hero-bg-v2">
+            <span className="hero-blob" />
+            <span className="hero-blob" />
+            <span className="hero-blob" />
           </div>
-        ) : heroVariant === 'v4' ? (
+        )}
+        {heroVariant === 'v3' && (
+          <div className="hero-bg-v3">
+            <span className="hero-aurora-band" />
+          </div>
+        )}
+        {heroVariant === 'v4' && (
           <div className="hero-bg-v4">
-            <div style={{
-              position: 'absolute',
-              top: '30%',
-              left: '-50%',
-              width: '200%',
-              height: '40%',
-              background: `linear-gradient(180deg, transparent 0%, rgba(var(--hero-light), 0.1) 45%, rgba(var(--hero-light), 0.1) 55%, transparent 100%)`,
-              animation: 'heroWaveC 22s cubic-bezier(0.37, 0, 0.63, 1) infinite',
-            }} />
+            <span className="hero-spotlight" />
+            <span className="hero-spotlight" />
+            <span className="hero-spotlight" />
           </div>
-        ) : (
-          <div className={`hero-bg-${heroVariant}`} />
+        )}
+        {heroVariant === 'v5' && (
+          <div className="hero-bg-v5">
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+            <span className="hero-bg-v5-el" />
+          </div>
         )}
 
         {/* Hero variant switcher — fixed bottom-right */}
