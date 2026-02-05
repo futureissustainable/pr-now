@@ -15,6 +15,7 @@ import {
   CheckSquare,
   User,
   Buildings,
+  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 import type { OutreachEmail, OutreachStatus } from '@/lib/types';
@@ -79,7 +80,20 @@ export default function OutboxPage() {
     <div style={{ maxWidth: 1200 }}>
       {/* Header */}
       <div className="flex items-start justify-between animate-in" style={{ marginBottom: 'var(--space-6)' }}>
-        <div>
+        <div className="section-bordered">
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '10px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              color: 'var(--accent)',
+              marginBottom: 'var(--space-2)',
+            }}
+          >
+            Email Queue
+          </div>
           <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
             Outbox
           </h1>
@@ -302,7 +316,8 @@ function EmailCard({
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>
             <span style={{ fontWeight: 600, fontSize: 'var(--fs-p-md)' }}>{email.contactName}</span>
-            <span style={{ color: 'var(--text-tertiary)', fontSize: '12px' }}>&middot; {email.outletName}</span>
+            <DotOutline size={10} weight="fill" style={{ color: 'var(--text-tertiary)' }} />
+            <span style={{ color: 'var(--text-tertiary)', fontSize: '12px' }}>{email.outletName}</span>
           </div>
           <div
             style={{

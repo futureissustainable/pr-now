@@ -10,6 +10,7 @@ import {
   EnvelopeSimple,
   List,
   CaretLeft,
+  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
@@ -164,7 +165,7 @@ export default function Sidebar() {
         {/* Footer */}
         <div style={{ padding: 'var(--space-4) var(--space-5)', borderTop: '2px solid var(--border-strong)' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', letterSpacing: '0.04em' }}>
-            v0.1.0 &middot; AI outreach
+            v0.1.0 <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> AI outreach
           </span>
         </div>
       </aside>

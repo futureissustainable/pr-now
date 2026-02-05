@@ -8,6 +8,7 @@ import {
   CheckCircle,
   ArrowRight,
   CalendarDots,
+  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
@@ -72,17 +73,29 @@ export default function LandingPage() {
           justifyContent: 'center',
           minHeight: 'calc(100vh - 160px)',
           padding: 'var(--space-16) var(--space-4)',
+          overflow: 'hidden',
         }}
       >
-        {/* Decorative grid lines */}
-        <div style={{ position: 'absolute', top: 0, left: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5 }} />
-        <div style={{ position: 'absolute', top: 0, right: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5 }} />
+        {/* Atmospheric radial glow */}
+        <div className="hero-glow" />
+
+        {/* Decorative ruled notebook lines */}
+        <div className="ruled-lines" />
+
+        {/* Decorative grid lines with animated reveal */}
+        <div style={{ position: 'absolute', top: 0, left: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5, transformOrigin: 'top', animation: 'drawLine 1s var(--ease-out) 200ms both' }} />
+        <div style={{ position: 'absolute', top: 0, right: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5, transformOrigin: 'top', animation: 'drawLine 1s var(--ease-out) 400ms both' }} />
+        <div style={{ position: 'absolute', top: 0, left: '50%', width: 1, height: '100%', background: 'var(--bone)', opacity: 0.2, transformOrigin: 'top', animation: 'drawLine 1.2s var(--ease-out) 600ms both' }} />
+
+        {/* Diagonal accent stripes */}
+        <div className="accent-stripe" style={{ top: '15%', right: '5%' }} />
+        <div className="accent-stripe" style={{ bottom: '20%', left: '3%', width: 120 }} />
 
         <div
           className="animate-in"
           style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: 720 }}
         >
-          {/* Mono label */}
+          {/* Mono label with accent underline */}
           <div
             className="animate-in stagger-1"
             style={{
@@ -93,9 +106,14 @@ export default function LandingPage() {
               letterSpacing: '0.12em',
               color: 'var(--accent)',
               marginBottom: 'var(--space-6)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 'var(--space-3)',
             }}
           >
+            <span style={{ width: 24, height: 2, background: 'var(--accent)' }} />
             AI-Powered PR Outreach
+            <span style={{ width: 24, height: 2, background: 'var(--accent)' }} />
           </div>
 
           <h1
@@ -112,7 +130,14 @@ export default function LandingPage() {
           >
             Get press<br />
             coverage,{' '}
-            <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>on autopilot</em>
+            <em style={{
+              fontStyle: 'italic',
+              color: 'var(--accent)',
+              textDecorationLine: 'underline',
+              textDecorationStyle: 'wavy',
+              textDecorationColor: 'rgba(156, 74, 46, 0.3)',
+              textUnderlineOffset: '6px',
+            }}>on autopilot</em>
           </h1>
 
           <div className="accent-bar animate-in stagger-3" style={{ margin: '0 auto var(--space-8)' }} />
@@ -164,7 +189,6 @@ export default function LandingPage() {
         }}
       >
         <div
-          className="animate-in stagger-5"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -180,12 +204,28 @@ export default function LandingPage() {
           ].map((f, i) => (
             <div
               key={f.title}
+              className="animate-in"
               style={{
                 padding: 'var(--space-8) var(--space-6)',
                 borderLeft: i > 0 ? '2px solid var(--border-strong)' : 'none',
+                animationDelay: `${400 + i * 100}ms`,
               }}
             >
-              <f.icon size={24} weight="bold" style={{ color: 'var(--text-primary)', marginBottom: 'var(--space-4)' }} />
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--accent-muted)',
+                  border: '1.5px solid var(--accent)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 'var(--space-4)',
+                }}
+              >
+                <f.icon size={20} weight="bold" style={{ color: 'var(--accent)' }} />
+              </div>
               <h3 style={{ fontSize: 'var(--fs-p-md)', fontWeight: 700, marginBottom: 'var(--space-2)', letterSpacing: '-0.01em' }}>
                 {f.title}
               </h3>
@@ -200,7 +240,7 @@ export default function LandingPage() {
       {/* Bottom */}
       <div style={{ padding: 'var(--space-6)', textAlign: 'center', position: 'relative', zIndex: 1 }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          Built with Claude, GPT, or Gemini &middot; Your API key stays local
+          Built with Claude, GPT, or Gemini <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> Your API key stays local
         </span>
       </div>
     </div>

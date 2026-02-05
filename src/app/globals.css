@@ -235,22 +235,30 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.6; }
 .badge-error { background: var(--error-muted); color: var(--error); border-color: var(--error); }
 .badge-info { background: var(--info-muted); color: var(--info); border-color: var(--info); }
 
-/* ─── Animations ─── */
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+/* ─── Animations — High-impact, orchestrated ─── */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes drawLine { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(156, 74, 46, 0.2); } 50% { box-shadow: 0 0 0 8px rgba(156, 74, 46, 0); } }
 
-.animate-in { animation: fadeInUp var(--duration-normal) var(--ease-out) both; }
+.animate-in { animation: fadeInUp 450ms var(--ease-out) both; }
 .animate-fade { animation: fadeIn var(--duration-normal) var(--ease-out) both; }
-.animate-slide-right { animation: slideInRight var(--duration-normal) var(--ease-out) both; }
+.animate-slide-right { animation: slideInRight 450ms var(--ease-out) both; }
+.animate-slide-left { animation: slideInLeft 450ms var(--ease-out) both; }
+.animate-scale { animation: scaleIn 450ms var(--ease-out) both; }
 
-.stagger-1 { animation-delay: 60ms; }
-.stagger-2 { animation-delay: 120ms; }
-.stagger-3 { animation-delay: 180ms; }
-.stagger-4 { animation-delay: 240ms; }
-.stagger-5 { animation-delay: 300ms; }
-.stagger-6 { animation-delay: 360ms; }
+.stagger-1 { animation-delay: 80ms; }
+.stagger-2 { animation-delay: 160ms; }
+.stagger-3 { animation-delay: 240ms; }
+.stagger-4 { animation-delay: 320ms; }
+.stagger-5 { animation-delay: 400ms; }
+.stagger-6 { animation-delay: 480ms; }
+.stagger-7 { animation-delay: 560ms; }
+.stagger-8 { animation-delay: 640ms; }
 
 .skeleton { background: linear-gradient(90deg, var(--bone) 25%, var(--almond-cream) 50%, var(--bone) 75%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: var(--radius-sm); }
 
@@ -264,3 +272,65 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.6; }
 .accent-bar { display: block; width: 48px; height: 4px; background: var(--accent); }
 .divider { width: 100%; height: 2px; background: var(--border-strong); }
 .divider-thin { width: 100%; height: 1px; background: var(--border-default); }
+
+/* ─── Atmospheric depth — layered warm radials ─── */
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 30%, rgba(156, 74, 46, 0.06), transparent 70%),
+    radial-gradient(ellipse 80% 40% at 30% 80%, rgba(213, 189, 175, 0.15), transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 20%, rgba(227, 213, 202, 0.12), transparent 50%);
+}
+
+/* Decorative ruled line pattern */
+.ruled-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 79px,
+      var(--bone) 79px,
+      var(--bone) 80px
+    );
+  opacity: 0.3;
+}
+
+/* Diagonal accent stripe */
+.accent-stripe {
+  position: absolute;
+  width: 200px;
+  height: 4px;
+  background: var(--accent);
+  transform: rotate(-45deg);
+  opacity: 0.12;
+}
+
+/* Hover lift for interactive elements */
+.hover-lift {
+  transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Focus ring for accessibility */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Page section with decorative left border */
+.section-bordered {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--space-6);
+}
+
+/* Responsive sidebar offset */
+@media (max-width: 1023px) {
+  main { margin-left: 0 !important; }
+}
