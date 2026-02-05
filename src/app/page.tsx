@@ -14,11 +14,11 @@ import {
 import { useStore } from '@/store/useStore';
 
 const heroVariants = [
-  { id: 'v1', label: 'Warm Ember', desc: 'Radial terracotta bloom' },
-  { id: 'v2', label: 'Blueprint', desc: 'Architectural grid' },
-  { id: 'v3', label: 'Topographic', desc: 'Contour rings' },
-  { id: 'v4', label: 'Editorial', desc: 'Diagonal stripes' },
-  { id: 'v5', label: 'Halftone', desc: 'Dot matrix' },
+  { id: 'v1', label: 'Breathe', desc: 'Pulsing glow' },
+  { id: 'v2', label: 'Drift', desc: 'Orbiting orbs' },
+  { id: 'v3', label: 'Aurora', desc: 'Color shift' },
+  { id: 'v4', label: 'Waves', desc: 'Flowing bands' },
+  { id: 'v5', label: 'Cosmos', desc: 'Particles + rings' },
 ] as const;
 
 const palettes = [
@@ -30,7 +30,7 @@ const palettes = [
 export default function LandingPage() {
   const seedDemoData = useStore((s) => s.seedDemoData);
   const [heroVariant, setHeroVariant] = useState<string>('v1');
-  const [palette, setPalette] = useState<string>('warm');
+  const [palette, setPalette] = useState<string>('indigo');
 
   useEffect(() => {
     if (palette === 'warm') {
@@ -104,8 +104,31 @@ export default function LandingPage() {
           overflow: 'hidden',
         }}
       >
-        {/* Switchable hero background */}
-        <div className={`hero-bg-${heroVariant}`} />
+        {/* Switchable animated hero background */}
+        {heroVariant === 'v5' ? (
+          <div className="hero-bg-v5">
+            <span className="hero-bg-v5-orb" />
+            <span className="hero-bg-v5-orb" />
+            <span className="hero-bg-v5-orb" />
+            <span className="hero-bg-v5-orb" />
+            <span className="hero-bg-v5-orb" />
+            <span className="hero-bg-v5-orb" />
+          </div>
+        ) : heroVariant === 'v4' ? (
+          <div className="hero-bg-v4">
+            <div style={{
+              position: 'absolute',
+              top: '30%',
+              left: '-50%',
+              width: '200%',
+              height: '40%',
+              background: `linear-gradient(180deg, transparent 0%, rgba(var(--hero-light), 0.1) 45%, rgba(var(--hero-light), 0.1) 55%, transparent 100%)`,
+              animation: 'heroWaveC 22s cubic-bezier(0.37, 0, 0.63, 1) infinite',
+            }} />
+          </div>
+        ) : (
+          <div className={`hero-bg-${heroVariant}`} />
+        )}
 
         {/* Hero variant switcher — fixed bottom-right */}
         <div
