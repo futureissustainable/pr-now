@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Lightning,
@@ -12,8 +13,35 @@ import {
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
+const heroVariants = [
+  { id: 'v1', label: 'Warm Ember', desc: 'Radial terracotta bloom' },
+  { id: 'v2', label: 'Blueprint', desc: 'Architectural grid' },
+  { id: 'v3', label: 'Topographic', desc: 'Contour rings' },
+  { id: 'v4', label: 'Editorial', desc: 'Diagonal stripes' },
+  { id: 'v5', label: 'Halftone', desc: 'Dot matrix' },
+] as const;
+
+const palettes = [
+  { id: 'warm', label: 'Warm Parchment', swatch: '#9c4a2e' },
+  { id: 'indigo', label: 'Indigo Night', swatch: '#4a4e69' },
+  { id: 'tuscan', label: 'Tuscan Sun', swatch: '#d4a82a' },
+] as const;
+
 export default function LandingPage() {
   const seedDemoData = useStore((s) => s.seedDemoData);
+  const [heroVariant, setHeroVariant] = useState<string>('v1');
+  const [palette, setPalette] = useState<string>('warm');
+
+  useEffect(() => {
+    if (palette === 'warm') {
+      delete document.documentElement.dataset.palette;
+    } else {
+      document.documentElement.dataset.palette = palette;
+    }
+    return () => {
+      delete document.documentElement.dataset.palette;
+    };
+  }, [palette]);
 
   return (
     <div className="grain-overlay" style={{ minHeight: '100vh', background: 'var(--linen)' }}>
@@ -76,20 +104,120 @@ export default function LandingPage() {
           overflow: 'hidden',
         }}
       >
-        {/* Atmospheric radial glow */}
-        <div className="hero-glow" />
+        {/* Switchable hero background */}
+        <div className={`hero-bg-${heroVariant}`} />
 
-        {/* Decorative ruled notebook lines */}
-        <div className="ruled-lines" />
+        {/* Hero variant switcher — fixed bottom-right */}
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 'var(--space-5)',
+            right: 'var(--space-5)',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-2)',
+            background: 'var(--bg-surface-raised)',
+            border: '2px solid var(--border-strong)',
+            borderRadius: 'var(--radius-md)',
+            padding: 'var(--space-3)',
+            boxShadow: '4px 4px 0 var(--border-strong)',
+          }}
+        >
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '9px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--text-tertiary)',
+            paddingBottom: 'var(--space-1)',
+            borderBottom: '1px solid var(--border-subtle)',
+          }}>
+            Hero BG
+          </span>
+          {heroVariants.map((v) => (
+            <button
+              key={v.id}
+              onClick={() => setHeroVariant(v.id)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-1) var(--space-2)',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                background: heroVariant === v.id ? 'var(--accent)' : 'transparent',
+                color: heroVariant === v.id ? 'var(--text-inverse)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                fontWeight: 600,
+                textAlign: 'left',
+                transition: 'all 100ms ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span style={{
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                background: heroVariant === v.id ? 'var(--text-inverse)' : 'var(--border-default)',
+                flexShrink: 0,
+              }} />
+              {v.label}
+            </button>
+          ))}
 
-        {/* Decorative grid lines with animated reveal */}
-        <div style={{ position: 'absolute', top: 0, left: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5, transformOrigin: 'top', animation: 'drawLine 1s var(--ease-out) 200ms both' }} />
-        <div style={{ position: 'absolute', top: 0, right: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5, transformOrigin: 'top', animation: 'drawLine 1s var(--ease-out) 400ms both' }} />
-        <div style={{ position: 'absolute', top: 0, left: '50%', width: 1, height: '100%', background: 'var(--bone)', opacity: 0.2, transformOrigin: 'top', animation: 'drawLine 1.2s var(--ease-out) 600ms both' }} />
-
-        {/* Diagonal accent stripes */}
-        <div className="accent-stripe" style={{ top: '15%', right: '5%' }} />
-        <div className="accent-stripe" style={{ bottom: '20%', left: '3%', width: 120 }} />
+          {/* Palette switcher */}
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '9px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--text-tertiary)',
+            paddingTop: 'var(--space-2)',
+            paddingBottom: 'var(--space-1)',
+            borderTop: '1px solid var(--border-subtle)',
+            marginTop: 'var(--space-1)',
+          }}>
+            Palette
+          </span>
+          {palettes.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => setPalette(p.id)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-1) var(--space-2)',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                background: palette === p.id ? 'var(--accent)' : 'transparent',
+                color: palette === p.id ? 'var(--text-inverse)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                fontWeight: 600,
+                textAlign: 'left',
+                transition: 'all 100ms ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span style={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: p.swatch,
+                flexShrink: 0,
+                border: palette === p.id ? '1.5px solid var(--text-inverse)' : '1.5px solid transparent',
+              }} />
+              {p.label}
+            </button>
+          ))}
+        </div>
 
         <div
           className="animate-in"
@@ -135,7 +263,7 @@ export default function LandingPage() {
               color: 'var(--accent)',
               textDecorationLine: 'underline',
               textDecorationStyle: 'wavy',
-              textDecorationColor: 'rgba(156, 74, 46, 0.3)',
+              textDecorationColor: 'rgba(var(--hero-accent), 0.3)',
               textUnderlineOffset: '6px',
             }}>on autopilot</em>
           </h1>

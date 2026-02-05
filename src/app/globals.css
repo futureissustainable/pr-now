@@ -44,6 +44,11 @@
   --info: #3d5a80;
   --info-muted: rgba(61, 90, 128, 0.08);
 
+  /* Hero background color channels (for palette-adaptive hero bgs) */
+  --hero-accent: 156, 74, 46;
+  --hero-mid: 214, 204, 194;
+  --hero-light: 227, 213, 202;
+
   --font-headline: 'DM Serif Display', Georgia, serif;
   --font-body: 'Albert Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Space Mono', monospace;
@@ -88,6 +93,74 @@
   --radius-full: 9999px;
 
   --sidebar-width: 260px;
+}
+
+/* ─── Palette: Indigo Night ─── */
+:root[data-palette="indigo"] {
+  --parchment: #f2e9e4;
+  --bone: #c9ada7;
+  --linen: #f2e9e4;
+  --almond-cream: #ddd0ca;
+  --almond-silk: #9a8c98;
+
+  --bg-root: #f2e9e4;
+  --bg-surface: #efe4de;
+  --bg-surface-raised: #ffffff;
+  --bg-surface-hover: #ddd0ca;
+  --bg-surface-active: #c9ada7;
+  --bg-overlay: rgba(34, 34, 59, 0.6);
+
+  --border-subtle: #c9ada7;
+  --border-default: #9a8c98;
+  --border-strong: #22223b;
+
+  --text-primary: #22223b;
+  --text-secondary: #4a4e69;
+  --text-tertiary: #9a8c98;
+  --text-inverse: #f2e9e4;
+
+  --accent: #4a4e69;
+  --accent-hover: #5c6080;
+  --accent-muted: rgba(74, 78, 105, 0.08);
+  --accent-text: #4a4e69;
+
+  --hero-accent: 74, 78, 105;
+  --hero-mid: 154, 140, 152;
+  --hero-light: 201, 173, 167;
+}
+
+/* ─── Palette: Tuscan Sun ─── */
+:root[data-palette="tuscan"] {
+  --parchment: #cfdbd5;
+  --bone: #b8c4b8;
+  --linen: #e8eddf;
+  --almond-cream: #cfdbd5;
+  --almond-silk: #adb8a8;
+
+  --bg-root: #e8eddf;
+  --bg-surface: #dde3d5;
+  --bg-surface-raised: #ffffff;
+  --bg-surface-hover: #cfdbd5;
+  --bg-surface-active: #b8c4b8;
+  --bg-overlay: rgba(36, 36, 35, 0.6);
+
+  --border-subtle: #cfdbd5;
+  --border-default: #adb8a8;
+  --border-strong: #242423;
+
+  --text-primary: #242423;
+  --text-secondary: #333533;
+  --text-tertiary: #7a7c7a;
+  --text-inverse: #e8eddf;
+
+  --accent: #d4a82a;
+  --accent-hover: #e0b83c;
+  --accent-muted: rgba(245, 203, 92, 0.12);
+  --accent-text: #9e7b10;
+
+  --hero-accent: 212, 168, 42;
+  --hero-mid: 207, 219, 213;
+  --hero-light: 232, 237, 223;
 }
 
 @theme inline {
@@ -243,7 +316,7 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.6; }
 @keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 @keyframes drawLine { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(156, 74, 46, 0.2); } 50% { box-shadow: 0 0 0 8px rgba(156, 74, 46, 0); } }
+@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(var(--hero-accent), 0.2); } 50% { box-shadow: 0 0 0 8px rgba(var(--hero-accent), 0); } }
 
 .animate-in { animation: fadeInUp 450ms var(--ease-out) both; }
 .animate-fade { animation: fadeIn var(--duration-normal) var(--ease-out) both; }
@@ -273,41 +346,90 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.6; }
 .divider { width: 100%; height: 2px; background: var(--border-strong); }
 .divider-thin { width: 100%; height: 1px; background: var(--border-default); }
 
-/* ─── Atmospheric depth — layered warm radials ─── */
-.hero-glow {
+/* ─── Hero Backgrounds — 5 switchable variants ─── */
+
+/* V1: Warm Ember — large warm radials with bloom center */
+.hero-bg-v1 {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 30%, rgba(156, 74, 46, 0.06), transparent 70%),
-    radial-gradient(ellipse 80% 40% at 30% 80%, rgba(213, 189, 175, 0.15), transparent 60%),
-    radial-gradient(ellipse 50% 60% at 80% 20%, rgba(227, 213, 202, 0.12), transparent 50%);
+    radial-gradient(circle 600px at 50% 40%, rgba(var(--hero-accent), 0.10), transparent 60%),
+    radial-gradient(ellipse 100% 60% at 20% 90%, rgba(var(--hero-mid), 0.25), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 85% 15%, rgba(var(--hero-light), 0.18), transparent 50%),
+    linear-gradient(180deg, var(--linen) 0%, var(--parchment) 100%);
 }
 
-/* Decorative ruled line pattern */
-.ruled-lines {
+/* V2: Blueprint Grid — architectural grid with accent intersections */
+.hero-bg-v2 {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 79px,
-      var(--bone) 79px,
-      var(--bone) 80px
-    );
-  opacity: 0.3;
+    linear-gradient(rgba(var(--hero-accent), 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--hero-accent), 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(var(--hero-accent), 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--hero-accent), 0.12) 1px, transparent 1px),
+    radial-gradient(circle 500px at 50% 50%, rgba(var(--hero-accent), 0.04), transparent 70%);
+  background-size:
+    20px 20px,
+    20px 20px,
+    100px 100px,
+    100px 100px,
+    100% 100%;
 }
 
-/* Diagonal accent stripe */
-.accent-stripe {
+/* V3: Topographic — concentric contour rings, organic feel */
+.hero-bg-v3 {
   position: absolute;
-  width: 200px;
-  height: 4px;
-  background: var(--accent);
-  transform: rotate(-45deg);
-  opacity: 0.12;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 200px at 50% 45%, transparent 60%, rgba(var(--hero-mid), 0.35) 61%, transparent 62%),
+    radial-gradient(circle 340px at 50% 45%, transparent 60%, rgba(var(--hero-mid), 0.25) 61%, transparent 62%),
+    radial-gradient(circle 480px at 50% 45%, transparent 60%, rgba(var(--hero-mid), 0.18) 61%, transparent 62%),
+    radial-gradient(circle 620px at 50% 45%, transparent 60%, rgba(var(--hero-mid), 0.12) 61%, transparent 62%),
+    radial-gradient(circle 760px at 50% 45%, transparent 60%, rgba(var(--hero-mid), 0.08) 61%, transparent 62%),
+    radial-gradient(circle 300px at 30% 70%, rgba(var(--hero-accent), 0.04), transparent 60%),
+    radial-gradient(circle 250px at 75% 25%, rgba(var(--hero-accent), 0.03), transparent 60%);
+}
+
+/* V4: Diagonal Stripe — bold repeating diagonal lines, editorial */
+.hero-bg-v4 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(var(--hero-mid), 0.25) 40px,
+      rgba(var(--hero-mid), 0.25) 41px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 80px,
+      rgba(var(--hero-accent), 0.05) 80px,
+      rgba(var(--hero-accent), 0.05) 81px
+    ),
+    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(var(--hero-accent), 0.06), transparent 70%);
+}
+
+/* V5: Halftone Dot — dot matrix pattern fading from center */
+.hero-bg-v5 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 1.5px at 10px 10px, rgba(var(--hero-accent), 0.12) 50%, transparent 50%),
+    radial-gradient(circle 1px at 30px 30px, rgba(var(--hero-mid), 0.3) 50%, transparent 50%),
+    radial-gradient(ellipse 60% 60% at 50% 40%, rgba(var(--hero-accent), 0.04), transparent 70%);
+  background-size:
+    20px 20px,
+    20px 20px,
+    100% 100%;
 }
 
 /* Hover lift for interactive elements */
