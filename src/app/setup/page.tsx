@@ -14,7 +14,7 @@ import {
   Robot,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
-import type { AIProvider, AIConfig, ProjectProfile } from '@/lib/types';
+import type { AIProvider, AIAuthMethod, AIConfig, ProjectProfile } from '@/lib/types';
 
 const steps = ['AI Provider', 'Project Details', 'Review'];
 
@@ -30,6 +30,7 @@ export default function SetupPage() {
 
   const [step, setStep] = useState(0);
   const [provider, setProvider] = useState<AIProvider>(aiConfig?.provider || 'anthropic');
+  const [authMethod, setAuthMethod] = useState<AIAuthMethod>(aiConfig?.authMethod || 'apiKey');
   const [apiKey, setApiKey] = useState(aiConfig?.apiKey || '');
   const [name, setName] = useState(projectProfile?.name || '');
   const [tagline, setTagline] = useState(projectProfile?.tagline || '');
@@ -46,7 +47,7 @@ export default function SetupPage() {
 
   const handleNext = () => {
     if (step === 0) {
-      setAIConfig({ provider, apiKey });
+      setAIConfig({ provider, apiKey, authMethod });
     }
     if (step === 1) {
       setProjectProfile({
@@ -180,22 +181,75 @@ export default function SetupPage() {
               ))}
             </div>
 
+            {/* Auth method toggle */}
             <div>
+              <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-3)', color: 'var(--text-secondary)' }}>
+                Authentication Method
+              </label>
+              <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+                <button
+                  onClick={() => { setAuthMethod('apiKey'); setApiKey(''); }}
+                  style={{
+                    flex: 1,
+                    padding: 'var(--space-3) var(--space-4)',
+                    borderRadius: 'var(--radius-sm)',
+                    border: `1.5px solid ${authMethod === 'apiKey' ? 'var(--accent)' : 'var(--border-default)'}`,
+                    background: authMethod === 'apiKey' ? 'var(--accent-muted)' : 'var(--bg-surface-raised)',
+                    color: authMethod === 'apiKey' ? 'var(--accent-text)' : 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    transition: 'all var(--duration-fast) var(--ease-standard)',
+                  }}
+                >
+                  API Key
+                </button>
+                <button
+                  onClick={() => { setAuthMethod('oauthToken'); setApiKey(''); }}
+                  style={{
+                    flex: 1,
+                    padding: 'var(--space-3) var(--space-4)',
+                    borderRadius: 'var(--radius-sm)',
+                    border: `1.5px solid ${authMethod === 'oauthToken' ? 'var(--accent)' : 'var(--border-default)'}`,
+                    background: authMethod === 'oauthToken' ? 'var(--accent-muted)' : 'var(--bg-surface-raised)',
+                    color: authMethod === 'oauthToken' ? 'var(--accent-text)' : 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    transition: 'all var(--duration-fast) var(--ease-standard)',
+                  }}
+                >
+                  OAuth Token
+                </button>
+              </div>
+
               <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
-                API Key
+                {authMethod === 'apiKey' ? 'API Key' : 'OAuth Bearer Token'}
               </label>
               <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>
                 <Key size={16} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
                 <input
                   type="password"
                   className="input"
-                  placeholder={providers.find((p) => p.id === provider)?.placeholder}
+                  placeholder={authMethod === 'apiKey'
+                    ? providers.find((p) => p.id === provider)?.placeholder
+                    : 'Paste your OAuth access token...'
+                  }
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                 />
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: 'var(--space-2)' }}>
-                Stored in your browser only. Never sent to our servers.
+                {authMethod === 'apiKey'
+                  ? 'Stored in your browser only. Never sent to our servers.'
+                  : 'OAuth token from your provider\'s console or CLI. Stored locally in your browser.'
+                }
               </p>
             </div>
           </div>
@@ -317,7 +371,7 @@ export default function SetupPage() {
                   {providers.find((p) => p.id === provider)?.name}
                 </div>
                 <div style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)', marginTop: 2 }}>
-                  Key: {apiKey.slice(0, 8)}...{apiKey.slice(-4)}
+                  {authMethod === 'oauthToken' ? 'Token' : 'Key'}: {apiKey.slice(0, 8)}...{apiKey.slice(-4)}
                 </div>
               </div>
 

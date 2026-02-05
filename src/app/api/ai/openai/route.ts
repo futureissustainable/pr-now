@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  const { apiKey, model, system, prompt } = await req.json();
+  const { apiKey, authMethod, model, system, prompt } = await req.json();
 
   if (!apiKey || !prompt) {
     return NextResponse.json({ error: 'Missing apiKey or prompt' }, { status: 400 });
