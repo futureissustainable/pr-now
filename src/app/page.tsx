@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import {
-  Robot,
   Lightning,
   EnvelopeSimple,
   MagnifyingGlass,
@@ -16,82 +15,115 @@ export default function LandingPage() {
   const seedDemoData = useStore((s) => s.seedDemoData);
 
   return (
-    <div className="grain-overlay" style={{ minHeight: '100vh' }}>
+    <div className="grain-overlay" style={{ minHeight: '100vh', background: 'var(--linen)' }}>
+      {/* Top bar */}
+      <nav
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: 'var(--space-5) var(--space-8)',
+          borderBottom: '2px solid var(--border-strong)',
+          background: 'var(--bg-surface-raised)',
+          position: 'relative',
+          zIndex: 2,
+        }}
+      >
+        <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
+          <div
+            style={{
+              width: 28,
+              height: 28,
+              background: 'var(--text-primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 'var(--radius-sm)',
+            }}
+          >
+            <span style={{ fontFamily: 'var(--font-headline)', fontSize: '16px', color: 'var(--text-inverse)', lineHeight: 1 }}>P</span>
+          </div>
+          <span style={{ fontFamily: 'var(--font-headline)', fontSize: 'var(--fs-p-lg)', color: 'var(--text-primary)' }}>PR Now</span>
+        </div>
+        <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
+          <button
+            onClick={() => {
+              seedDemoData();
+              window.location.href = '/dashboard';
+            }}
+            className="btn-ghost"
+            style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}
+          >
+            Demo
+          </button>
+          <Link href="/setup" className="btn-primary" style={{ fontSize: 'var(--fs-p-sm)' }}>
+            Get Started <ArrowRight size={14} weight="bold" />
+          </Link>
+        </div>
+      </nav>
+
       {/* Hero */}
       <div
         style={{
           position: 'relative',
-          overflow: 'hidden',
-          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          minHeight: 'calc(100vh - 160px)',
+          padding: 'var(--space-16) var(--space-4)',
         }}
       >
-        {/* Gradient bg */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'radial-gradient(ellipse 80% 60% at 50% 20%, rgba(232, 131, 74, 0.08) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-        />
+        {/* Decorative grid lines */}
+        <div style={{ position: 'absolute', top: 0, left: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5 }} />
+        <div style={{ position: 'absolute', top: 0, right: '10%', width: 2, height: '100%', background: 'var(--bone)', opacity: 0.5 }} />
 
-        {/* Content */}
         <div
-          className="container-page animate-in"
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            textAlign: 'center',
-            maxWidth: 800,
-            padding: 'var(--space-8) var(--space-4)',
-          }}
+          className="animate-in"
+          style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: 720 }}
         >
-          {/* Badge */}
+          {/* Mono label */}
           <div
             className="animate-in stagger-1"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 'var(--space-2)',
-              padding: 'var(--space-2) var(--space-4)',
-              borderRadius: 'var(--radius-full)',
-              background: 'var(--accent-muted)',
-              color: 'var(--accent-text)',
-              fontSize: 'var(--fs-p-sm)',
-              fontWeight: 600,
-              marginBottom: 'var(--space-8)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.12em',
+              color: 'var(--accent)',
+              marginBottom: 'var(--space-6)',
             }}
           >
-            <Lightning size={14} weight="fill" />
             AI-Powered PR Outreach
           </div>
 
           <h1
             className="animate-in stagger-2"
             style={{
-              fontSize: 'clamp(2.5rem, 6vw, var(--fs-h-xxl))',
-              fontWeight: 700,
-              letterSpacing: '-0.04em',
-              lineHeight: 1.05,
-              marginBottom: 'var(--space-6)',
+              fontFamily: 'var(--font-headline)',
+              fontSize: 'clamp(3rem, 7vw, 5.5rem)',
+              fontWeight: 400,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.0,
+              marginBottom: 'var(--space-8)',
+              color: 'var(--text-primary)',
             }}
           >
-            Get press coverage
-            <br />
-            <span style={{ color: 'var(--accent)' }}>on autopilot</span>
+            Get press<br />
+            coverage,{' '}
+            <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>on autopilot</em>
           </h1>
+
+          <div className="accent-bar animate-in stagger-3" style={{ margin: '0 auto var(--space-8)' }} />
 
           <p
             className="animate-in stagger-3"
             style={{
-              fontSize: 'var(--fs-p-xl)',
+              fontSize: 'var(--fs-p-lg)',
               color: 'var(--text-secondary)',
-              lineHeight: 1.7,
-              maxWidth: 600,
+              lineHeight: 1.8,
+              maxWidth: 520,
               margin: '0 auto var(--space-10)',
             }}
           >
@@ -100,20 +132,12 @@ export default function LandingPage() {
             outreach pipeline. You approve every email before it sends.
           </p>
 
-          {/* CTA */}
           <div
             className="animate-in stagger-4"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 'var(--space-4)',
-              flexWrap: 'wrap',
-            }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-4)', flexWrap: 'wrap' }}
           >
             <Link href="/setup" className="btn-primary" style={{ padding: 'var(--space-4) var(--space-8)', fontSize: 'var(--fs-p-md)' }}>
-              Get Started
-              <ArrowRight size={16} weight="bold" />
+              Start Outreach <ArrowRight size={16} weight="bold" />
             </Link>
             <button
               onClick={() => {
@@ -127,45 +151,57 @@ export default function LandingPage() {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Features grid */}
+      {/* Feature strip */}
+      <div
+        style={{
+          borderTop: '2px solid var(--border-strong)',
+          borderBottom: '2px solid var(--border-strong)',
+          background: 'var(--bg-surface-raised)',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
         <div
-          className="container-page animate-in stagger-5"
+          className="animate-in stagger-5"
           style={{
-            position: 'relative',
-            zIndex: 1,
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: 'var(--space-4)',
-            maxWidth: 900,
-            marginTop: 'var(--space-16)',
-            paddingBottom: 'var(--space-16)',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            maxWidth: 1000,
+            margin: '0 auto',
           }}
         >
           {[
-            { icon: MagnifyingGlass, title: 'Smart Discovery', desc: 'AI finds relevant outlets and niche publications matching your project' },
-            { icon: EnvelopeSimple, title: 'Drafted Pitches', desc: 'Personalized emails for journalists and editorial teams, ready for your review' },
-            { icon: CalendarDots, title: 'Scheduled Campaigns', desc: 'Run outreach daily, weekly, or continuously with smart scheduling' },
-            { icon: CheckCircle, title: 'Approval Queue', desc: 'Review every email with a simple approve or reject before anything sends' },
-          ].map((f) => (
+            { icon: MagnifyingGlass, title: 'Smart Discovery', desc: 'AI finds relevant outlets and niche publications' },
+            { icon: EnvelopeSimple, title: 'Drafted Pitches', desc: 'Personalized emails for journalists and editorial teams' },
+            { icon: CalendarDots, title: 'Scheduling', desc: 'Daily, weekly, or continuous outreach campaigns' },
+            { icon: CheckCircle, title: 'Approval Queue', desc: 'Approve or reject every email with one click' },
+          ].map((f, i) => (
             <div
               key={f.title}
-              className="card"
               style={{
-                padding: 'var(--space-6)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--space-3)',
+                padding: 'var(--space-8) var(--space-6)',
+                borderLeft: i > 0 ? '2px solid var(--border-strong)' : 'none',
               }}
             >
-              <f.icon size={24} weight="duotone" style={{ color: 'var(--accent)' }} />
-              <h3 style={{ fontSize: 'var(--fs-p-lg)', fontWeight: 600 }}>{f.title}</h3>
+              <f.icon size={24} weight="bold" style={{ color: 'var(--text-primary)', marginBottom: 'var(--space-4)' }} />
+              <h3 style={{ fontSize: 'var(--fs-p-md)', fontWeight: 700, marginBottom: 'var(--space-2)', letterSpacing: '-0.01em' }}>
+                {f.title}
+              </h3>
               <p style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                 {f.desc}
               </p>
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Bottom */}
+      <div style={{ padding: 'var(--space-6)', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          Built with Claude, GPT, or Gemini &middot; Your API key stays local
+        </span>
       </div>
     </div>
   );

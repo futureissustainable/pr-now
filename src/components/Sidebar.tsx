@@ -8,8 +8,6 @@ import {
   Newspaper,
   CalendarDots,
   EnvelopeSimple,
-  ChartBar,
-  Robot,
   List,
   CaretLeft,
 } from '@phosphor-icons/react';
@@ -18,7 +16,7 @@ import { useStore } from '@/store/useStore';
 const navItems = [
   { href: '/dashboard', label: 'Overview', icon: House },
   { href: '/setup', label: 'Setup', icon: GearSix },
-  { href: '/outlets', label: 'Outlets & Contacts', icon: Newspaper },
+  { href: '/outlets', label: 'Outlets', icon: Newspaper },
   { href: '/campaigns', label: 'Campaigns', icon: CalendarDots },
   { href: '/outbox', label: 'Outbox', icon: EnvelopeSimple },
 ];
@@ -29,7 +27,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle */}
       <button
         onClick={toggleSidebar}
         className="fixed top-4 left-4 z-50 lg:hidden btn-ghost"
@@ -38,10 +35,10 @@ export default function Sidebar() {
         <List size={20} weight="bold" />
       </button>
 
-      {/* Overlay on mobile */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-30 lg:hidden"
+          style={{ background: 'var(--bg-overlay)' }}
           onClick={toggleSidebar}
         />
       )}
@@ -54,37 +51,47 @@ export default function Sidebar() {
         `}
         style={{
           width: 'var(--sidebar-width)',
-          background: 'var(--bg-surface)',
-          borderRight: '1px solid var(--border-subtle)',
+          background: 'var(--bg-surface-raised)',
+          borderRight: '2px solid var(--border-strong)',
         }}
       >
         {/* Logo */}
         <div
           className="flex items-center justify-between"
-          style={{ padding: 'var(--space-6) var(--space-5)', marginBottom: 'var(--space-2)' }}
+          style={{ padding: 'var(--space-6) var(--space-5)', borderBottom: '2px solid var(--border-strong)' }}
         >
-          <Link href="/dashboard" className="flex items-center gap-2 no-underline">
+          <Link href="/dashboard" className="flex items-center gap-3 no-underline">
             <div
-              className="flex items-center justify-center"
               style={{
                 width: 32,
                 height: 32,
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--accent)',
+                background: 'var(--text-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 'var(--radius-sm)',
               }}
             >
-              <Robot size={18} weight="bold" color="var(--text-inverse)" />
+              <span style={{ fontFamily: 'var(--font-headline)', fontSize: '18px', fontWeight: 700, color: 'var(--text-inverse)', lineHeight: 1 }}>P</span>
             </div>
-            <span
-              style={{
-                fontWeight: 700,
-                fontSize: 'var(--fs-p-lg)',
-                color: 'var(--text-primary)',
-                letterSpacing: '-0.03em',
-              }}
-            >
-              PR Now
-            </span>
+            <div>
+              <span
+                style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontWeight: 400,
+                  fontSize: 'var(--fs-p-xl)',
+                  color: 'var(--text-primary)',
+                  letterSpacing: '-0.02em',
+                  display: 'block',
+                  lineHeight: 1,
+                }}
+              >
+                PR Now
+              </span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-tertiary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                media outreach
+              </span>
+            </div>
           </Link>
           <button
             onClick={toggleSidebar}
@@ -96,13 +103,14 @@ export default function Sidebar() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 flex flex-col" style={{ padding: '0 var(--space-3)', gap: 'var(--space-1)' }}>
+        <nav className="flex-1 flex flex-col" style={{ padding: 'var(--space-4) var(--space-3)', gap: 'var(--space-1)' }}>
           <div
             style={{
-              fontSize: '11px',
-              fontWeight: 600,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '10px',
+              fontWeight: 700,
               textTransform: 'uppercase',
-              letterSpacing: '0.08em',
+              letterSpacing: '0.1em',
               color: 'var(--text-tertiary)',
               padding: 'var(--space-2) var(--space-3)',
               marginBottom: 'var(--space-1)',
@@ -124,16 +132,17 @@ export default function Sidebar() {
                 style={{
                   gap: 'var(--space-3)',
                   padding: 'var(--space-3) var(--space-3)',
-                  borderRadius: 'var(--radius-md)',
+                  borderRadius: 'var(--radius-sm)',
                   fontSize: 'var(--fs-p-sm)',
                   fontWeight: isActive ? 600 : 450,
                   color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  background: isActive ? 'var(--bg-surface-hover)' : 'transparent',
+                  background: isActive ? 'var(--almond-cream)' : 'transparent',
+                  borderLeft: isActive ? '3px solid var(--accent)' : '3px solid transparent',
                   transition: 'all 150ms var(--ease-standard)',
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.background = 'var(--bg-surface-raised)';
+                    e.currentTarget.style.background = 'var(--parchment)';
                     e.currentTarget.style.color = 'var(--text-primary)';
                   }
                 }}
@@ -146,30 +155,17 @@ export default function Sidebar() {
               >
                 <Icon size={18} weight={isActive ? 'fill' : 'regular'} />
                 {item.label}
-                {item.href === '/outbox' && (
-                  <PendingBadge />
-                )}
+                {item.href === '/outbox' && <PendingBadge />}
               </Link>
             );
           })}
         </nav>
 
         {/* Footer */}
-        <div
-          style={{
-            padding: 'var(--space-4) var(--space-5)',
-            borderTop: '1px solid var(--border-subtle)',
-          }}
-        >
-          <div
-            className="flex items-center"
-            style={{ gap: 'var(--space-3)' }}
-          >
-            <ChartBar size={16} style={{ color: 'var(--text-tertiary)' }} />
-            <span style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-tertiary)' }}>
-              AI-Powered PR Outreach
-            </span>
-          </div>
+        <div style={{ padding: 'var(--space-4) var(--space-5)', borderTop: '2px solid var(--border-strong)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', letterSpacing: '0.04em' }}>
+            v0.1.0 &middot; AI outreach
+          </span>
         </div>
       </aside>
     </>
@@ -182,8 +178,16 @@ function PendingBadge() {
   if (pending === 0) return null;
   return (
     <span
-      className="badge badge-accent"
-      style={{ marginLeft: 'auto', fontSize: '10px', padding: '1px 6px' }}
+      style={{
+        marginLeft: 'auto',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '10px',
+        fontWeight: 700,
+        background: 'var(--accent)',
+        color: 'var(--text-inverse)',
+        padding: '1px 8px',
+        borderRadius: 'var(--radius-sm)',
+      }}
     >
       {pending}
     </span>
