@@ -14,6 +14,7 @@ import {
   Spinner,
   EnvelopeSimple,
   Newspaper,
+  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 import { draftIndividualEmail, draftPublicationEmail } from '@/lib/ai';
@@ -101,7 +102,20 @@ export default function CampaignsPage() {
     <div style={{ maxWidth: 1200 }}>
       {/* Header */}
       <div className="flex items-start justify-between animate-in" style={{ marginBottom: 'var(--space-6)' }}>
-        <div>
+        <div className="section-bordered">
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '10px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              color: 'var(--accent)',
+              marginBottom: 'var(--space-2)',
+            }}
+          >
+            Scheduling
+          </div>
           <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
             Campaigns
           </h1>
@@ -163,8 +177,8 @@ export default function CampaignsPage() {
                       </span>
                     </div>
                     <div style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)' }}>
-                      {frequencies.find((f) => f.id === campaign.frequency)?.label} &middot;{' '}
-                      {campaign.targetOutlets.length} outlets &middot;{' '}
+                      {frequencies.find((f) => f.id === campaign.frequency)?.label} <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} />{' '}
+                      {campaign.targetOutlets.length} outlets <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} />{' '}
                       Created {new Date(campaign.createdAt).toLocaleDateString()}
                     </div>
                   </div>

@@ -12,6 +12,7 @@ import {
   Clock,
   ArrowRight,
   Lightning,
+  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
@@ -43,7 +44,20 @@ export default function DashboardPage() {
   return (
     <div style={{ maxWidth: 1200 }}>
       {/* Page header */}
-      <div className="animate-in" style={{ marginBottom: 'var(--space-8)' }}>
+      <div className="animate-in section-bordered" style={{ marginBottom: 'var(--space-8)' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--accent)',
+            marginBottom: 'var(--space-2)',
+          }}
+        >
+          Overview
+        </div>
         <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
           Dashboard
         </h1>
@@ -188,7 +202,7 @@ export default function DashboardPage() {
                   <div>
                     <div style={{ fontSize: 'var(--fs-p-sm)', fontWeight: 500 }}>{c.name}</div>
                     <div style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                      {c.frequency} &middot; {c.targetOutlets.length} outlets
+                      {c.frequency} <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> {c.targetOutlets.length} outlets
                     </div>
                   </div>
                   <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>

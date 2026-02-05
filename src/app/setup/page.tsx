@@ -69,7 +69,20 @@ export default function SetupPage() {
   return (
     <div style={{ maxWidth: 680 }}>
       {/* Header */}
-      <div className="animate-in" style={{ marginBottom: 'var(--space-8)' }}>
+      <div className="animate-in section-bordered" style={{ marginBottom: 'var(--space-8)' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--accent)',
+            marginBottom: 'var(--space-2)',
+          }}
+        >
+          Configuration
+        </div>
         <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
           Setup
         </h1>

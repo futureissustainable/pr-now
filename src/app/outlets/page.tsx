@@ -15,6 +15,7 @@ import {
   Spinner,
   Star,
   UserPlus,
+  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 import { discoverOutlets, findContacts } from '@/lib/ai';
@@ -91,12 +92,25 @@ export default function OutletsPage() {
     <div style={{ maxWidth: 1200 }}>
       {/* Header */}
       <div className="flex items-start justify-between animate-in" style={{ marginBottom: 'var(--space-6)' }}>
-        <div>
+        <div className="section-bordered">
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '10px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              color: 'var(--accent)',
+              marginBottom: 'var(--space-2)',
+            }}
+          >
+            Media Database
+          </div>
           <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
             Outlets & Contacts
           </h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--space-2)' }}>
-            {outlets.length} outlets &middot; {contacts.length} contacts
+            {outlets.length} outlets <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> {contacts.length} contacts
           </p>
         </div>
         <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
@@ -182,7 +196,7 @@ export default function OutletsPage() {
                   <div>
                     <div style={{ fontWeight: 600, fontSize: 'var(--fs-p-md)' }}>{outlet.name}</div>
                     <div style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                      {outlet.niche} &middot; {outlet.type}
+                      {outlet.niche} <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> {outlet.type}
                     </div>
                   </div>
                 </div>
