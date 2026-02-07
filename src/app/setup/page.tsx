@@ -75,7 +75,7 @@ export default function SetupPage() {
         <span className="section-label" style={{ display: 'block', marginBottom: 'var(--space-3)' }}>
           Configuration
         </span>
-        <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 'var(--space-2)' }}>
+        <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 400, letterSpacing: '-0.03em', marginBottom: 'var(--space-2)' }}>
           Setup
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-md)', lineHeight: 1.6 }}>

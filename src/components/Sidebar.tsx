@@ -72,16 +72,17 @@ export default function Sidebar() {
                 borderRadius: 'var(--radius-sm)',
               }}
             >
-              <span style={{ fontFamily: 'var(--font-headline)', fontSize: '16px', fontWeight: 800, color: 'var(--text-inverse)', lineHeight: 1 }}>P</span>
+              <span style={{ fontFamily: 'var(--font-headline)', fontSize: '16px', fontWeight: 400, color: 'var(--text-inverse)', lineHeight: 1, fontStyle: 'italic' }}>P</span>
             </div>
             <div>
               <span
                 style={{
                   fontFamily: 'var(--font-headline)',
-                  fontWeight: 700,
+                  fontWeight: 400,
                   fontSize: 'var(--fs-2xl)',
                   color: 'var(--text-primary)',
-                  letterSpacing: '-0.03em',
+                  letterSpacing: '-0.02em',
+                  fontStyle: 'italic',
                   display: 'block',
                   lineHeight: 1,
                 }}
