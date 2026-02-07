@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import {
   Plus,
-  MagnifyingGlass,
+
   Trash,
   Lightning,
   Globe,
@@ -15,7 +15,6 @@ import {
   Spinner,
   Star,
   UserPlus,
-  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 import { discoverOutlets, findContacts } from '@/lib/ai';
@@ -91,26 +90,44 @@ export default function OutletsPage() {
   return (
     <div style={{ maxWidth: 1200 }}>
       {/* Header */}
-      <div className="flex items-start justify-between animate-in" style={{ marginBottom: 'var(--space-6)' }}>
+      <div
+        className="flex items-start justify-between animate-in"
+        style={{ marginBottom: 'var(--space-10)' }}
+      >
         <div className="section-bordered">
           <div
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '10px',
+              fontSize: 'var(--fs-xs)',
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
               color: 'var(--accent)',
-              marginBottom: 'var(--space-2)',
+              marginBottom: 'var(--space-3)',
             }}
           >
             Media Database
           </div>
-          <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
+          <h1
+            style={{
+              fontSize: 'var(--fs-4xl)',
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+            }}
+          >
             Outlets & Contacts
           </h1>
-          <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--space-2)' }}>
-            {outlets.length} outlets <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> {contacts.length} contacts
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: 'var(--fs-sm)',
+              marginTop: 'var(--space-2)',
+              letterSpacing: '0.01em',
+            }}
+          >
+            {outlets.length} outlets{' '}
+            <span style={{ color: 'var(--text-tertiary)', margin: '0 var(--space-1)' }}>&middot;</span>{' '}
+            {contacts.length} contacts
           </p>
         </div>
         <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
@@ -137,7 +154,7 @@ export default function OutletsPage() {
         style={{
           display: 'flex',
           gap: 'var(--space-2)',
-          marginBottom: 'var(--space-6)',
+          marginBottom: 'var(--space-8)',
         }}
       >
         {(['all', 'picked', 'discovered'] as const).map((f) => (
@@ -147,7 +164,7 @@ export default function OutletsPage() {
             onClick={() => setFilter(f)}
             style={{
               padding: 'var(--space-2) var(--space-4)',
-              fontSize: 'var(--fs-p-sm)',
+              fontSize: 'var(--fs-sm)',
               textTransform: 'capitalize',
             }}
           >
@@ -163,7 +180,7 @@ export default function OutletsPage() {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: 'var(--space-4)',
+          gap: 'var(--space-5)',
           marginBottom: 'var(--space-10)',
         }}
       >
@@ -176,48 +193,105 @@ export default function OutletsPage() {
               key={outlet.id}
               className="card animate-in"
               style={{
-                padding: 'var(--space-5)',
+                padding: 'var(--space-6)',
                 animationDelay: `${i * 30}ms`,
               }}
             >
-              <div className="flex items-start justify-between" style={{ marginBottom: 'var(--space-4)' }}>
+              {/* Card header */}
+              <div
+                className="flex items-start justify-between"
+                style={{ marginBottom: 'var(--space-4)' }}
+              >
                 <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
                   <div
                     className="flex items-center justify-center"
                     style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 'var(--radius-md)',
+                      width: 34,
+                      height: 34,
+                      borderRadius: 'var(--radius-sm)',
                       background: outlet.isDiscovered ? 'var(--info-muted)' : 'var(--accent-muted)',
+                      border: '1px solid',
+                      borderColor: outlet.isDiscovered
+                        ? 'rgba(61, 90, 128, 0.1)'
+                        : 'rgba(156, 74, 46, 0.1)',
                     }}
                   >
-                    <Icon size={18} weight="duotone" style={{ color: outlet.isDiscovered ? 'var(--info)' : 'var(--accent)' }} />
+                    <Icon
+                      size={16}
+                      weight="regular"
+                      style={{
+                        color: outlet.isDiscovered ? 'var(--info)' : 'var(--accent)',
+                      }}
+                    />
                   </div>
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: 'var(--fs-p-md)' }}>{outlet.name}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                      {outlet.niche} <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> {outlet.type}
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 'var(--fs-md)',
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      {outlet.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 'var(--fs-xs)',
+                        color: 'var(--text-tertiary)',
+                        letterSpacing: '0.01em',
+                      }}
+                    >
+                      {outlet.niche}
+                      <span style={{ margin: '0 var(--space-1)' }}>&middot;</span>
+                      {outlet.type}
                     </div>
                   </div>
                 </div>
                 <button
                   className="btn-ghost"
                   onClick={() => removeOutlet(outlet.id)}
-                  style={{ padding: 'var(--space-1)', color: 'var(--text-tertiary)' }}
+                  style={{
+                    padding: 'var(--space-1)',
+                    color: 'var(--text-tertiary)',
+                  }}
                 >
                   <Trash size={14} />
                 </button>
               </div>
 
-              <div className="flex items-center" style={{ gap: 'var(--space-4)', marginBottom: 'var(--space-3)' }}>
+              {/* Meta row */}
+              <div
+                className="flex items-center"
+                style={{
+                  gap: 'var(--space-4)',
+                  marginBottom: 'var(--space-4)',
+                  paddingBottom: 'var(--space-4)',
+                  borderBottom: '1px solid var(--border-subtle)',
+                }}
+              >
                 {outlet.audienceSize && (
-                  <div className="flex items-center" style={{ gap: 'var(--space-1)', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  <div
+                    className="flex items-center"
+                    style={{
+                      gap: 'var(--space-1)',
+                      fontSize: 'var(--fs-xs)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
                     <Users size={12} /> {outlet.audienceSize}
                   </div>
                 )}
                 {outlet.relevanceScore !== undefined && (
-                  <div className="flex items-center" style={{ gap: 'var(--space-1)', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    <Star size={12} weight="fill" style={{ color: 'var(--warning)' }} /> {outlet.relevanceScore}%
+                  <div
+                    className="flex items-center"
+                    style={{
+                      gap: 'var(--space-1)',
+                      fontSize: 'var(--fs-xs)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
+                    <Star size={12} weight="fill" style={{ color: 'var(--warning)' }} />{' '}
+                    {outlet.relevanceScore}%
                   </div>
                 )}
                 {outlet.isDiscovered && (
@@ -227,8 +301,18 @@ export default function OutletsPage() {
 
               {/* Contacts for this outlet */}
               {outletContacts.length > 0 && (
-                <div style={{ marginBottom: 'var(--space-3)' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-2)' }}>
+                <div style={{ marginBottom: 'var(--space-4)' }}>
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 'var(--fs-xs)',
+                      color: 'var(--text-tertiary)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      fontWeight: 700,
+                      marginBottom: 'var(--space-2)',
+                    }}
+                  >
                     Contacts
                   </div>
                   {outletContacts.map((c) => (
@@ -238,14 +322,22 @@ export default function OutletsPage() {
                       style={{
                         padding: 'var(--space-2) var(--space-3)',
                         borderRadius: 'var(--radius-sm)',
-                        background: 'var(--bg-surface-raised)',
+                        background: 'var(--bg-surface)',
                         marginBottom: 'var(--space-1)',
-                        fontSize: 'var(--fs-p-sm)',
+                        fontSize: 'var(--fs-sm)',
                       }}
                     >
                       <div>
                         <span style={{ fontWeight: 500 }}>{c.name}</span>
-                        <span style={{ color: 'var(--text-tertiary)', marginLeft: 'var(--space-2)' }}>{c.role}</span>
+                        <span
+                          style={{
+                            color: 'var(--text-tertiary)',
+                            marginLeft: 'var(--space-2)',
+                            fontSize: 'var(--fs-xs)',
+                          }}
+                        >
+                          {c.role}
+                        </span>
                       </div>
                       <button
                         className="btn-ghost"
@@ -259,11 +351,21 @@ export default function OutletsPage() {
                 </div>
               )}
 
+              {/* Find contacts action */}
               <button
                 className="btn-ghost"
                 onClick={() => handleFindContacts(outlet)}
                 disabled={findingContacts === outlet.id}
-                style={{ width: '100%', justifyContent: 'center', fontSize: 'var(--fs-p-sm)' }}
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  fontSize: 'var(--fs-sm)',
+                  padding: 'var(--space-2) var(--space-3)',
+                  borderTop: outletContacts.length === 0 ? '1px solid var(--border-subtle)' : 'none',
+                  borderRadius: outletContacts.length === 0 ? 0 : 'var(--radius-sm)',
+                  paddingTop: outletContacts.length === 0 ? 'var(--space-3)' : undefined,
+                  marginTop: outletContacts.length === 0 ? 'auto' : 0,
+                }}
               >
                 {findingContacts === outlet.id ? (
                   <><Spinner size={14} className="animate-spin" /> Finding contacts...</>
@@ -275,6 +377,24 @@ export default function OutletsPage() {
           );
         })}
       </div>
+
+      {/* Empty state */}
+      {filtered.length === 0 && (
+        <div
+          className="animate-in"
+          style={{
+            textAlign: 'center',
+            padding: 'var(--space-16) var(--space-8)',
+            color: 'var(--text-tertiary)',
+            fontSize: 'var(--fs-sm)',
+            letterSpacing: '0.01em',
+          }}
+        >
+          {filter === 'all'
+            ? 'No outlets yet. Add one manually or use AI Discover.'
+            : `No ${filter} outlets found.`}
+        </div>
+      )}
 
       {/* Add outlet modal */}
       {showAddModal && (
@@ -291,7 +411,7 @@ export default function OutletsPage() {
           onClick={() => setShowAddModal(false)}
         >
           <div
-            className="card animate-in"
+            className="card animate-scale"
             style={{
               padding: 'var(--space-8)',
               width: '100%',
@@ -299,17 +419,68 @@ export default function OutletsPage() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 style={{ fontSize: 'var(--fs-p-xl)', fontWeight: 600, marginBottom: 'var(--space-6)' }}>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--fs-xs)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: 'var(--accent)',
+                marginBottom: 'var(--space-2)',
+              }}
+            >
+              New Entry
+            </div>
+            <h2
+              style={{
+                fontSize: 'var(--fs-xl)',
+                fontWeight: 600,
+                marginBottom: 'var(--space-6)',
+                letterSpacing: '-0.02em',
+              }}
+            >
               Add Outlet
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>Name *</label>
-                <input className="input" placeholder="e.g. TechCrunch" value={newOutlet.name} onChange={(e) => setNewOutlet({ ...newOutlet, name: e.target.value })} />
+                <label
+                  style={{
+                    display: 'block',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--fs-xs)',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    marginBottom: 'var(--space-2)',
+                    color: 'var(--text-secondary)',
+                  }}
+                >
+                  Name *
+                </label>
+                <input
+                  className="input"
+                  placeholder="e.g. TechCrunch"
+                  value={newOutlet.name}
+                  onChange={(e) => setNewOutlet({ ...newOutlet, name: e.target.value })}
+                />
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>Type</label>
+                  <label
+                    style={{
+                      display: 'block',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 'var(--fs-xs)',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      marginBottom: 'var(--space-2)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
+                    Type
+                  </label>
                   <select
                     className="input"
                     value={newOutlet.type}
@@ -323,17 +494,65 @@ export default function OutletsPage() {
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>Niche</label>
-                  <input className="input" placeholder="e.g. AI, Dev Tools" value={newOutlet.niche} onChange={(e) => setNewOutlet({ ...newOutlet, niche: e.target.value })} />
+                  <label
+                    style={{
+                      display: 'block',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 'var(--fs-xs)',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      marginBottom: 'var(--space-2)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
+                    Niche
+                  </label>
+                  <input
+                    className="input"
+                    placeholder="e.g. AI, Dev Tools"
+                    value={newOutlet.niche}
+                    onChange={(e) => setNewOutlet({ ...newOutlet, niche: e.target.value })}
+                  />
                 </div>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>URL</label>
-                <input className="input" placeholder="https://..." value={newOutlet.url} onChange={(e) => setNewOutlet({ ...newOutlet, url: e.target.value })} />
+                <label
+                  style={{
+                    display: 'block',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--fs-xs)',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    marginBottom: 'var(--space-2)',
+                    color: 'var(--text-secondary)',
+                  }}
+                >
+                  URL
+                </label>
+                <input
+                  className="input"
+                  placeholder="https://..."
+                  value={newOutlet.url}
+                  onChange={(e) => setNewOutlet({ ...newOutlet, url: e.target.value })}
+                />
               </div>
-              <div className="flex items-center justify-end" style={{ gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
-                <button className="btn-secondary" onClick={() => setShowAddModal(false)}>Cancel</button>
-                <button className="btn-primary" onClick={handleAddOutlet}>Add Outlet</button>
+              <div
+                className="flex items-center justify-end"
+                style={{
+                  gap: 'var(--space-3)',
+                  marginTop: 'var(--space-4)',
+                  paddingTop: 'var(--space-4)',
+                  borderTop: '1px solid var(--border-subtle)',
+                }}
+              >
+                <button className="btn-ghost" onClick={() => setShowAddModal(false)}>
+                  Cancel
+                </button>
+                <button className="btn-primary" onClick={handleAddOutlet}>
+                  Add Outlet
+                </button>
               </div>
             </div>
           </div>

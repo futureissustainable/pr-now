@@ -10,17 +10,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   if (isLanding) return <>{children}</>;
 
   return (
-    <div className="grain-overlay" style={{ minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }}>
       <Sidebar />
       <main
         style={{
           marginLeft: 'var(--sidebar-width)',
           minHeight: '100vh',
           position: 'relative',
-          zIndex: 1,
         }}
       >
-        <div style={{ padding: 'var(--space-8) var(--space-8)' }}>
+        <div style={{ padding: 'var(--space-10) var(--space-10)' }}>
           {children}
         </div>
       </main>

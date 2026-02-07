@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Key,
-  Briefcase,
+
   Trophy,
   ArrowRight,
   ArrowLeft,
@@ -14,14 +14,14 @@ import {
   Robot,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
-import type { AIProvider, AIAuthMethod, AIConfig, ProjectProfile } from '@/lib/types';
+import type { AIProvider, AIAuthMethod } from '@/lib/types';
 
 const steps = ['AI Provider', 'Project Details', 'Review'];
 
-const providers: { id: AIProvider; name: string; desc: string; placeholder: string }[] = [
-  { id: 'anthropic', name: 'Anthropic (Claude)', desc: 'Claude Sonnet, Opus, Haiku', placeholder: 'sk-ant-api03-...' },
-  { id: 'openai', name: 'OpenAI (GPT)', desc: 'GPT-4o, GPT-4, GPT-3.5', placeholder: 'sk-...' },
-  { id: 'google', name: 'Google (Gemini)', desc: 'Gemini 2.0, 1.5 Pro/Flash', placeholder: 'AIza...' },
+const providers: { id: AIProvider; name: string; desc: string; placeholder: string; supportsOAuth: boolean }[] = [
+  { id: 'anthropic', name: 'Anthropic (Claude)', desc: 'Claude Opus 4.6, Sonnet 4, Haiku', placeholder: 'sk-ant-api03-...', supportsOAuth: false },
+  { id: 'openai', name: 'OpenAI (GPT)', desc: 'GPT-4o, GPT-4, GPT-3.5', placeholder: 'sk-...', supportsOAuth: true },
+  { id: 'google', name: 'Google (Gemini)', desc: 'Gemini 2.0, 1.5 Pro/Flash', placeholder: 'AIza...', supportsOAuth: true },
 ];
 
 export default function SetupPage() {
@@ -47,7 +47,8 @@ export default function SetupPage() {
 
   const handleNext = () => {
     if (step === 0) {
-      setAIConfig({ provider, apiKey, authMethod });
+      const effectiveAuthMethod = providers.find((p) => p.id === provider)?.supportsOAuth ? authMethod : 'apiKey';
+      setAIConfig({ provider, apiKey, authMethod: effectiveAuthMethod });
     }
     if (step === 1) {
       setProjectProfile({
@@ -70,24 +71,14 @@ export default function SetupPage() {
   return (
     <div style={{ maxWidth: 680 }}>
       {/* Header */}
-      <div className="animate-in section-bordered" style={{ marginBottom: 'var(--space-8)' }}>
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '10px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            color: 'var(--accent)',
-            marginBottom: 'var(--space-2)',
-          }}
-        >
+      <div className="animate-in" style={{ marginBottom: 'var(--space-10)' }}>
+        <span className="section-label" style={{ display: 'block', marginBottom: 'var(--space-3)' }}>
           Configuration
-        </div>
-        <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
+        </span>
+        <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 'var(--space-2)' }}>
           Setup
         </h1>
-        <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--space-2)' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-md)', lineHeight: 1.6 }}>
           Configure your AI provider and project profile
         </p>
       </div>
@@ -98,32 +89,37 @@ export default function SetupPage() {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 'var(--space-3)',
-          marginBottom: 'var(--space-8)',
+          gap: 'var(--space-2)',
+          marginBottom: 'var(--space-10)',
         }}
       >
         {steps.map((s, i) => (
-          <div key={s} className="flex items-center" style={{ gap: 'var(--space-3)' }}>
+          <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
             <div
-              className="flex items-center justify-center"
               style={{
-                width: 28,
-                height: 28,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 26,
+                height: 26,
                 borderRadius: 'var(--radius-full)',
-                fontSize: '12px',
+                fontSize: 'var(--fs-xs)',
                 fontWeight: 600,
-                background: i <= step ? 'var(--accent)' : 'var(--bg-surface-raised)',
+                fontFamily: 'var(--font-mono)',
+                background: i < step ? 'var(--accent)' : i === step ? 'var(--text-primary)' : 'transparent',
                 color: i <= step ? 'var(--text-inverse)' : 'var(--text-tertiary)',
+                border: i > step ? '1px solid var(--border-default)' : '1px solid transparent',
                 transition: 'all var(--duration-fast) var(--ease-standard)',
               }}
             >
-              {i < step ? <Check size={14} weight="bold" /> : i + 1}
+              {i < step ? <Check size={12} weight="bold" /> : i + 1}
             </div>
             <span
               style={{
-                fontSize: 'var(--fs-p-sm)',
+                fontSize: 'var(--fs-sm)',
                 color: i <= step ? 'var(--text-primary)' : 'var(--text-tertiary)',
                 fontWeight: i === step ? 600 : 400,
+                letterSpacing: '0.01em',
               }}
             >
               {s}
@@ -131,9 +127,11 @@ export default function SetupPage() {
             {i < steps.length - 1 && (
               <div
                 style={{
-                  width: 40,
+                  width: 32,
                   height: 1,
                   background: i < step ? 'var(--accent)' : 'var(--border-default)',
+                  marginLeft: 'var(--space-2)',
+                  marginRight: 'var(--space-2)',
                 }}
               />
             )}
@@ -144,12 +142,12 @@ export default function SetupPage() {
       {/* Step content */}
       <div className="card animate-in stagger-2" style={{ padding: 'var(--space-8)' }}>
         {step === 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
             <div>
-              <h2 style={{ fontSize: 'var(--fs-p-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
                 Choose your AI provider
               </h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-p-sm)' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)', lineHeight: 1.6 }}>
                 Your API key is stored locally and used to make AI calls for outlet discovery and email drafting.
               </p>
             </div>
@@ -164,80 +162,94 @@ export default function SetupPage() {
                     alignItems: 'center',
                     gap: 'var(--space-4)',
                     padding: 'var(--space-4) var(--space-5)',
-                    borderRadius: 'var(--radius-md)',
-                    border: `1px solid ${provider === p.id ? 'var(--accent)' : 'var(--border-default)'}`,
-                    background: provider === p.id ? 'var(--accent-muted)' : 'var(--bg-surface-raised)',
+                    borderRadius: 'var(--radius-sm)',
+                    border: provider === p.id ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                    background: provider === p.id ? 'var(--accent-muted)' : 'transparent',
                     cursor: 'pointer',
                     textAlign: 'left',
                     transition: 'all var(--duration-fast) var(--ease-standard)',
                   }}
                 >
-                  <Robot size={22} weight={provider === p.id ? 'fill' : 'regular'} style={{ color: provider === p.id ? 'var(--accent)' : 'var(--text-tertiary)' }} />
+                  <Robot
+                    size={20}
+                    weight={provider === p.id ? 'fill' : 'regular'}
+                    style={{ color: provider === p.id ? 'var(--accent)' : 'var(--text-tertiary)', flexShrink: 0 }}
+                  />
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: 'var(--fs-p-md)', color: 'var(--text-primary)' }}>{p.name}</div>
-                    <div style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)' }}>{p.desc}</div>
+                    <div style={{ fontWeight: 600, fontSize: 'var(--fs-md)', color: 'var(--text-primary)' }}>{p.name}</div>
+                    <div style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)', marginTop: 2 }}>{p.desc}</div>
                   </div>
                 </button>
               ))}
             </div>
 
-            {/* Auth method toggle */}
+            {/* Auth method toggle -- only show for providers that support OAuth */}
             <div>
-              <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-3)', color: 'var(--text-secondary)' }}>
-                Authentication Method
-              </label>
-              <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
-                <button
-                  onClick={() => { setAuthMethod('apiKey'); setApiKey(''); }}
-                  style={{
-                    flex: 1,
-                    padding: 'var(--space-3) var(--space-4)',
-                    borderRadius: 'var(--radius-sm)',
-                    border: `1.5px solid ${authMethod === 'apiKey' ? 'var(--accent)' : 'var(--border-default)'}`,
-                    background: authMethod === 'apiKey' ? 'var(--accent-muted)' : 'var(--bg-surface-raised)',
-                    color: authMethod === 'apiKey' ? 'var(--accent-text)' : 'var(--text-secondary)',
-                    cursor: 'pointer',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    transition: 'all var(--duration-fast) var(--ease-standard)',
-                  }}
-                >
-                  API Key
-                </button>
-                <button
-                  onClick={() => { setAuthMethod('oauthToken'); setApiKey(''); }}
-                  style={{
-                    flex: 1,
-                    padding: 'var(--space-3) var(--space-4)',
-                    borderRadius: 'var(--radius-sm)',
-                    border: `1.5px solid ${authMethod === 'oauthToken' ? 'var(--accent)' : 'var(--border-default)'}`,
-                    background: authMethod === 'oauthToken' ? 'var(--accent-muted)' : 'var(--bg-surface-raised)',
-                    color: authMethod === 'oauthToken' ? 'var(--accent-text)' : 'var(--text-secondary)',
-                    cursor: 'pointer',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    transition: 'all var(--duration-fast) var(--ease-standard)',
-                  }}
-                >
-                  OAuth Token
-                </button>
-              </div>
+              {providers.find((p) => p.id === provider)?.supportsOAuth && (
+                <>
+                  <label
+                    className="label-caps"
+                    style={{ display: 'block', marginBottom: 'var(--space-3)' }}
+                  >
+                    Authentication Method
+                  </label>
+                  <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)' }}>
+                    <button
+                      onClick={() => { setAuthMethod('apiKey'); setApiKey(''); }}
+                      style={{
+                        flex: 1,
+                        padding: 'var(--space-3) var(--space-4)',
+                        borderRadius: 'var(--radius-sm)',
+                        border: authMethod === 'apiKey' ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                        background: authMethod === 'apiKey' ? 'var(--accent-muted)' : 'transparent',
+                        color: authMethod === 'apiKey' ? 'var(--accent-text)' : 'var(--text-secondary)',
+                        cursor: 'pointer',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        transition: 'all var(--duration-fast) var(--ease-standard)',
+                      }}
+                    >
+                      API Key
+                    </button>
+                    <button
+                      onClick={() => { setAuthMethod('oauthToken'); setApiKey(''); }}
+                      style={{
+                        flex: 1,
+                        padding: 'var(--space-3) var(--space-4)',
+                        borderRadius: 'var(--radius-sm)',
+                        border: authMethod === 'oauthToken' ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                        background: authMethod === 'oauthToken' ? 'var(--accent-muted)' : 'transparent',
+                        color: authMethod === 'oauthToken' ? 'var(--accent-text)' : 'var(--text-secondary)',
+                        cursor: 'pointer',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        transition: 'all var(--duration-fast) var(--ease-standard)',
+                      }}
+                    >
+                      OAuth Token
+                    </button>
+                  </div>
+                </>
+              )}
 
-              <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
-                {authMethod === 'apiKey' ? 'API Key' : 'OAuth Bearer Token'}
+              <label
+                className="label-caps"
+                style={{ display: 'block', marginBottom: 'var(--space-3)' }}
+              >
+                {!providers.find((p) => p.id === provider)?.supportsOAuth ? 'API Key' : authMethod === 'apiKey' ? 'API Key' : 'OAuth Bearer Token'}
               </label>
-              <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                 <Key size={16} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
                 <input
                   type="password"
                   className="input"
-                  placeholder={authMethod === 'apiKey'
+                  placeholder={!providers.find((p) => p.id === provider)?.supportsOAuth || authMethod === 'apiKey'
                     ? providers.find((p) => p.id === provider)?.placeholder
                     : 'Paste your OAuth access token...'
                   }
@@ -245,36 +257,33 @@ export default function SetupPage() {
                   onChange={(e) => setApiKey(e.target.value)}
                 />
               </div>
-              <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: 'var(--space-2)' }}>
-                {authMethod === 'apiKey'
-                  ? 'Stored in your browser only. Never sent to our servers.'
-                  : 'OAuth token from your provider\'s console or CLI. Stored locally in your browser.'
-                }
+              <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)', marginTop: 'var(--space-3)', lineHeight: 1.5 }}>
+                Stored in your browser only. Never sent to our servers.
               </p>
             </div>
           </div>
         )}
 
         {step === 1 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             <div>
-              <h2 style={{ fontSize: 'var(--fs-p-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
                 Tell us about your project
               </h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-p-sm)' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)', lineHeight: 1.6 }}>
                 The AI uses this to craft relevant pitches and find matching outlets.
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-5)' }}>
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
+                <label className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-2)' }}>
                   Project Name *
                 </label>
                 <input className="input" placeholder="e.g. PR Now" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
+                <label className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-2)' }}>
                   Category
                 </label>
                 <input className="input" placeholder="e.g. AI / SaaS / DevTools" value={category} onChange={(e) => setCategory(e.target.value)} />
@@ -282,14 +291,14 @@ export default function SetupPage() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
+              <label className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-2)' }}>
                 Tagline
               </label>
               <input className="input" placeholder="One-line description" value={tagline} onChange={(e) => setTagline(e.target.value)} />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
+              <label className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-2)' }}>
                 Project Brief *
               </label>
               <textarea
@@ -302,29 +311,29 @@ export default function SetupPage() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
+              <label className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-2)' }}>
                 Website
               </label>
               <input className="input" placeholder="https://..." value={website} onChange={(e) => setWebsite(e.target.value)} />
             </div>
 
             <div>
-              <div className="flex items-center justify-between" style={{ marginBottom: 'var(--space-2)' }}>
-                <label style={{ fontSize: 'var(--fs-p-sm)', fontWeight: 500, color: 'var(--text-secondary)' }}>
-                  <Trophy size={14} style={{ marginRight: 4, verticalAlign: 'middle' }} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
+                <label className="label-caps" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                  <Trophy size={12} />
                   Key Achievements *
                 </label>
                 <button
                   className="btn-ghost"
                   onClick={() => setAchievements([...achievements, ''])}
-                  style={{ fontSize: '12px' }}
+                  style={{ fontSize: 'var(--fs-xs)' }}
                 >
                   <Plus size={12} /> Add
                 </button>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                 {achievements.map((a, i) => (
-                  <div key={i} className="flex items-center" style={{ gap: 'var(--space-2)' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                     <input
                       className="input"
                       placeholder={`Achievement ${i + 1}, e.g. "500+ beta users in 2 months"`}
@@ -352,61 +361,51 @@ export default function SetupPage() {
         )}
 
         {step === 2 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-            <h2 style={{ fontSize: 'var(--fs-p-xl)', fontWeight: 600 }}>Review & Launch</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
+            <div>
+              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+                Review & Launch
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)', lineHeight: 1.6 }}>
+                Confirm your configuration before proceeding.
+              </p>
+            </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-              <div
-                style={{
-                  padding: 'var(--space-4) var(--space-5)',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-surface-raised)',
-                  border: '1px solid var(--border-subtle)',
-                }}
-              >
-                <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-2)' }}>
+              <div className="card-flat" style={{ padding: 'var(--space-5) var(--space-6)' }}>
+                <span className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-2)' }}>
                   AI Provider
-                </div>
-                <div style={{ fontWeight: 600 }}>
+                </span>
+                <div style={{ fontWeight: 600, fontSize: 'var(--fs-lg)' }}>
                   {providers.find((p) => p.id === provider)?.name}
                 </div>
-                <div style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)', marginTop: 2 }}>
+                <div style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)', marginTop: 'var(--space-1)' }}>
                   {authMethod === 'oauthToken' ? 'Token' : 'Key'}: {apiKey.slice(0, 8)}...{apiKey.slice(-4)}
                 </div>
               </div>
 
-              <div
-                style={{
-                  padding: 'var(--space-4) var(--space-5)',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-surface-raised)',
-                  border: '1px solid var(--border-subtle)',
-                }}
-              >
-                <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-2)' }}>
+              <div className="card-flat" style={{ padding: 'var(--space-5) var(--space-6)' }}>
+                <span className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-2)' }}>
                   Project
-                </div>
-                <div style={{ fontWeight: 600 }}>{name}</div>
-                {tagline && <div style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)', marginTop: 2 }}>{tagline}</div>}
-                <div style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)', marginTop: 'var(--space-2)', lineHeight: 1.6 }}>
+                </span>
+                <div style={{ fontWeight: 600, fontSize: 'var(--fs-lg)' }}>{name}</div>
+                {tagline && (
+                  <div style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)', marginTop: 'var(--space-1)' }}>
+                    {tagline}
+                  </div>
+                )}
+                <div style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)', marginTop: 'var(--space-3)', lineHeight: 1.6 }}>
                   {brief.length > 200 ? brief.slice(0, 200) + '...' : brief}
                 </div>
               </div>
 
-              <div
-                style={{
-                  padding: 'var(--space-4) var(--space-5)',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-surface-raised)',
-                  border: '1px solid var(--border-subtle)',
-                }}
-              >
-                <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-2)' }}>
+              <div className="card-flat" style={{ padding: 'var(--space-5) var(--space-6)' }}>
+                <span className="label-caps" style={{ display: 'block', marginBottom: 'var(--space-3)' }}>
                   Achievements
-                </div>
-                <ul style={{ margin: 0, paddingLeft: 'var(--space-5)', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+                </span>
+                <ul style={{ margin: 0, paddingLeft: 'var(--space-5)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                   {achievements.filter((a) => a.trim()).map((a, i) => (
-                    <li key={i} style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)' }}>{a}</li>
+                    <li key={i} style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{a}</li>
                   ))}
                 </ul>
               </div>
@@ -417,8 +416,12 @@ export default function SetupPage() {
 
       {/* Navigation */}
       <div
-        className="flex items-center justify-between"
-        style={{ marginTop: 'var(--space-6)' }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: 'var(--space-8)',
+        }}
       >
         <button
           className="btn-secondary"

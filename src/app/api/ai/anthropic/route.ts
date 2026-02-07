@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      model: model || 'claude-sonnet-4-20250514',
+      model: model || 'claude-opus-4-6',
       max_tokens: 2048,
       system: system || '',
       messages: [{ role: 'user', content: prompt }],
