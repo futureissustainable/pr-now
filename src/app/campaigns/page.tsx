@@ -5,16 +5,12 @@ import {
   Plus,
   Play,
   Pause,
-  Stop,
   Lightning,
   CalendarDots,
   Clock,
   Repeat,
   ArrowsClockwise,
   Spinner,
-  EnvelopeSimple,
-  Newspaper,
-  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 import { draftIndividualEmail, draftPublicationEmail } from '@/lib/ai';
@@ -101,25 +97,23 @@ export default function CampaignsPage() {
   return (
     <div style={{ maxWidth: 1200 }}>
       {/* Header */}
-      <div className="flex items-start justify-between animate-in" style={{ marginBottom: 'var(--space-6)' }}>
+      <div
+        className="flex items-start justify-between animate-in"
+        style={{ marginBottom: 'var(--space-10)' }}
+      >
         <div className="section-bordered">
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '10px',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              color: 'var(--accent)',
-              marginBottom: 'var(--space-2)',
-            }}
-          >
+          <div className="section-label" style={{ marginBottom: 'var(--space-2)' }}>
             Scheduling
           </div>
-          <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
+          <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 700, letterSpacing: '-0.03em' }}>
             Campaigns
           </h1>
-          <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--space-2)' }}>
+          <p style={{
+            color: 'var(--text-secondary)',
+            fontSize: 'var(--fs-md)',
+            marginTop: 'var(--space-3)',
+            lineHeight: 1.5,
+          }}>
             Schedule and manage your outreach campaigns
           </p>
         </div>
@@ -129,20 +123,34 @@ export default function CampaignsPage() {
       </div>
 
       {/* Campaigns list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
         {campaigns.length === 0 ? (
           <div
             className="card animate-in stagger-1"
             style={{
-              padding: 'var(--space-12)',
+              padding: 'var(--space-16) var(--space-8)',
               textAlign: 'center',
             }}
           >
-            <CalendarDots size={48} weight="duotone" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }} />
-            <h3 style={{ fontSize: 'var(--fs-p-lg)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+            <CalendarDots
+              size={40}
+              weight="duotone"
+              style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--space-5)' }}
+            />
+            <h3 style={{
+              fontSize: 'var(--fs-xl)',
+              fontWeight: 600,
+              marginBottom: 'var(--space-3)',
+            }}>
               No campaigns yet
             </h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-p-sm)', maxWidth: 400, margin: '0 auto var(--space-5)' }}>
+            <p style={{
+              color: 'var(--text-secondary)',
+              fontSize: 'var(--fs-sm)',
+              maxWidth: 380,
+              margin: '0 auto var(--space-6)',
+              lineHeight: 1.6,
+            }}>
               Create your first campaign to start generating AI-powered outreach emails.
             </p>
             <button className="btn-primary" onClick={() => setShowCreate(true)}>
@@ -160,12 +168,28 @@ export default function CampaignsPage() {
               <div
                 key={campaign.id}
                 className="card animate-in"
-                style={{ padding: 'var(--space-6)', animationDelay: `${i * 50}ms` }}
+                style={{
+                  padding: 'var(--space-8)',
+                  animationDelay: `${i * 50}ms`,
+                }}
               >
-                <div className="flex items-start justify-between" style={{ marginBottom: 'var(--space-4)' }}>
+                {/* Campaign header */}
+                <div
+                  className="flex items-start justify-between"
+                  style={{ marginBottom: 'var(--space-6)' }}
+                >
                   <div>
-                    <div className="flex items-center" style={{ gap: 'var(--space-3)', marginBottom: 'var(--space-1)' }}>
-                      <h3 style={{ fontSize: 'var(--fs-p-lg)', fontWeight: 600 }}>{campaign.name}</h3>
+                    <div
+                      className="flex items-center"
+                      style={{ gap: 'var(--space-3)', marginBottom: 'var(--space-2)' }}
+                    >
+                      <h3 style={{
+                        fontSize: 'var(--fs-xl)',
+                        fontWeight: 600,
+                        letterSpacing: '-0.01em',
+                      }}>
+                        {campaign.name}
+                      </h3>
                       <span className={`status-dot ${
                         campaign.status === 'active' ? 'status-dot-active' :
                         campaign.status === 'paused' ? 'status-dot-pending' :
@@ -176,9 +200,15 @@ export default function CampaignsPage() {
                         {campaign.status}
                       </span>
                     </div>
-                    <div style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)' }}>
-                      {frequencies.find((f) => f.id === campaign.frequency)?.label} <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} />{' '}
-                      {campaign.targetOutlets.length} outlets <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} />{' '}
+                    <div style={{
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.5,
+                    }}>
+                      {frequencies.find((f) => f.id === campaign.frequency)?.label}
+                      <span style={{ margin: '0 6px', color: 'var(--text-tertiary)' }}>&middot;</span>
+                      {campaign.targetOutlets.length} outlets
+                      <span style={{ margin: '0 6px', color: 'var(--text-tertiary)' }}>&middot;</span>
                       Created {new Date(campaign.createdAt).toLocaleDateString()}
                     </div>
                   </div>
@@ -188,7 +218,7 @@ export default function CampaignsPage() {
                         className="btn-primary"
                         onClick={() => handleGenerate(campaign.id)}
                         disabled={generating === campaign.id}
-                        style={{ fontSize: 'var(--fs-p-sm)' }}
+                        style={{ fontSize: 'var(--fs-sm)' }}
                       >
                         {generating === campaign.id ? (
                           <><Spinner size={14} className="animate-spin" /> Generating...</>
@@ -201,7 +231,7 @@ export default function CampaignsPage() {
                       <button
                         className="btn-secondary"
                         onClick={() => updateCampaignStatus(campaign.id, 'paused')}
-                        style={{ fontSize: 'var(--fs-p-sm)' }}
+                        style={{ fontSize: 'var(--fs-sm)' }}
                       >
                         <Pause size={14} /> Pause
                       </button>
@@ -210,7 +240,7 @@ export default function CampaignsPage() {
                       <button
                         className="btn-secondary"
                         onClick={() => updateCampaignStatus(campaign.id, 'active')}
-                        style={{ fontSize: 'var(--fs-p-sm)' }}
+                        style={{ fontSize: 'var(--fs-sm)' }}
                       >
                         <Play size={14} weight="fill" /> Resume
                       </button>
@@ -222,27 +252,54 @@ export default function CampaignsPage() {
                 <div
                   style={{
                     display: 'flex',
-                    gap: 'var(--space-6)',
-                    padding: 'var(--space-4)',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--bg-surface-raised)',
+                    gap: 'var(--space-10)',
+                    padding: 'var(--space-5) var(--space-6)',
+                    borderRadius: 'var(--radius-sm)',
+                    borderTop: '1px solid var(--border-subtle)',
+                    borderBottom: '1px solid var(--border-subtle)',
                   }}
                 >
                   {[
                     { label: 'Pending', count: pending, color: 'var(--warning)' },
                     { label: 'Approved', count: approved, color: 'var(--success)' },
                     { label: 'Sent', count: sent, color: 'var(--info)' },
-                    { label: 'Total', count: campaignEmails.length, color: 'var(--text-secondary)' },
+                    { label: 'Total', count: campaignEmails.length, color: 'var(--text-primary)' },
                   ].map((s) => (
-                    <div key={s.label}>
-                      <div style={{ fontSize: 'var(--fs-h-sm)', fontWeight: 700, color: s.color }}>{s.count}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</div>
+                    <div key={s.label} style={{ minWidth: 56 }}>
+                      <div style={{
+                        fontSize: 'var(--fs-3xl)',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-headline)',
+                        color: s.color,
+                        lineHeight: 1.1,
+                        letterSpacing: '-0.02em',
+                      }}>
+                        {s.count}
+                      </div>
+                      <div style={{
+                        fontSize: 'var(--fs-xs)',
+                        fontFamily: 'var(--font-mono)',
+                        color: 'var(--text-tertiary)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                        marginTop: 'var(--space-1)',
+                      }}>
+                        {s.label}
+                      </div>
                     </div>
                   ))}
                 </div>
 
+                {/* Target niches */}
                 {campaign.targetNiches.length > 0 && (
-                  <div className="flex items-center" style={{ gap: 'var(--space-2)', marginTop: 'var(--space-3)', flexWrap: 'wrap' }}>
+                  <div
+                    className="flex items-center"
+                    style={{
+                      gap: 'var(--space-2)',
+                      marginTop: 'var(--space-5)',
+                      flexWrap: 'wrap',
+                    }}
+                  >
                     {campaign.targetNiches.map((n) => (
                       <span key={n} className="badge badge-info">{n}</span>
                     ))}
@@ -269,70 +326,147 @@ export default function CampaignsPage() {
           onClick={() => setShowCreate(false)}
         >
           <div
-            className="card animate-in"
+            className="card animate-scale"
             style={{
-              padding: 'var(--space-8)',
+              padding: 'var(--space-10)',
               width: '100%',
-              maxWidth: 600,
+              maxWidth: 560,
               maxHeight: '85vh',
               overflowY: 'auto',
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 style={{ fontSize: 'var(--fs-p-xl)', fontWeight: 600, marginBottom: 'var(--space-6)' }}>
-              New Campaign
-            </h2>
+            <div style={{ marginBottom: 'var(--space-8)' }}>
+              <div className="section-label" style={{ marginBottom: 'var(--space-2)' }}>
+                Create
+              </div>
+              <h2 style={{
+                fontSize: 'var(--fs-3xl)',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+              }}>
+                New Campaign
+              </h2>
+            </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+              {/* Campaign name */}
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--fs-xs)',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: 'var(--space-3)',
+                  color: 'var(--text-tertiary)',
+                }}>
                   Campaign Name
                 </label>
-                <input className="input" placeholder="e.g. Launch Week Blitz" value={name} onChange={(e) => setName(e.target.value)} />
+                <input
+                  className="input"
+                  placeholder="e.g. Launch Week Blitz"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </div>
 
               {/* Frequency */}
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-3)', color: 'var(--text-secondary)' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--fs-xs)',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: 'var(--space-3)',
+                  color: 'var(--text-tertiary)',
+                }}>
                   Schedule
                 </label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 'var(--space-2)' }}>
-                  {frequencies.map((f) => (
-                    <button
-                      key={f.id}
-                      onClick={() => setFrequency(f.id)}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        gap: 'var(--space-1)',
-                        padding: 'var(--space-3) var(--space-4)',
-                        borderRadius: 'var(--radius-md)',
-                        border: `1px solid ${frequency === f.id ? 'var(--accent)' : 'var(--border-default)'}`,
-                        background: frequency === f.id ? 'var(--accent-muted)' : 'var(--bg-surface-raised)',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        transition: 'all var(--duration-fast) var(--ease-standard)',
-                      }}
-                    >
-                      <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>
-                        <f.icon size={14} weight={frequency === f.id ? 'fill' : 'regular'} style={{ color: frequency === f.id ? 'var(--accent)' : 'var(--text-tertiary)' }} />
-                        <span style={{ fontWeight: 600, fontSize: 'var(--fs-p-sm)', color: 'var(--text-primary)' }}>{f.label}</span>
-                      </div>
-                      <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{f.desc}</span>
-                    </button>
-                  ))}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+                  gap: 'var(--space-2)',
+                }}>
+                  {frequencies.map((f) => {
+                    const isSelected = frequency === f.id;
+                    return (
+                      <button
+                        key={f.id}
+                        onClick={() => setFrequency(f.id)}
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: 'var(--space-1)',
+                          padding: 'var(--space-4)',
+                          borderRadius: 'var(--radius-sm)',
+                          border: `1px solid ${isSelected ? 'var(--text-primary)' : 'var(--border-subtle)'}`,
+                          background: isSelected ? 'var(--bg-surface)' : 'transparent',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'all var(--duration-fast) var(--ease-standard)',
+                        }}
+                      >
+                        <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>
+                          <f.icon
+                            size={13}
+                            weight={isSelected ? 'bold' : 'regular'}
+                            style={{
+                              color: isSelected ? 'var(--text-primary)' : 'var(--text-tertiary)',
+                            }}
+                          />
+                          <span style={{
+                            fontWeight: 600,
+                            fontSize: 'var(--fs-sm)',
+                            color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)',
+                          }}>
+                            {f.label}
+                          </span>
+                        </div>
+                        <span style={{
+                          fontSize: 'var(--fs-xs)',
+                          color: 'var(--text-tertiary)',
+                          lineHeight: 1.4,
+                        }}>
+                          {f.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Target outlets */}
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-3)', color: 'var(--text-secondary)' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--fs-xs)',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: 'var(--space-3)',
+                  color: 'var(--text-tertiary)',
+                }}>
                   Target Outlets ({selectedOutlets.length} selected)
                 </label>
-                <div style={{ maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+                <div style={{
+                  maxHeight: 200,
+                  overflowY: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 'var(--space-1)',
+                }}>
                   {outlets.length === 0 ? (
-                    <p style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-tertiary)' }}>
+                    <p style={{
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--text-tertiary)',
+                      padding: 'var(--space-4) 0',
+                    }}>
                       No outlets yet. Add some in the Outlets page first.
                     </p>
                   ) : (
@@ -343,28 +477,30 @@ export default function CampaignsPage() {
                         className="flex items-center"
                         style={{
                           gap: 'var(--space-3)',
-                          padding: 'var(--space-2) var(--space-3)',
+                          padding: 'var(--space-3) var(--space-3)',
                           borderRadius: 'var(--radius-sm)',
-                          background: selectedOutlets.includes(o.id) ? 'var(--accent-muted)' : 'transparent',
+                          background: selectedOutlets.includes(o.id) ? 'var(--bg-surface)' : 'transparent',
                           border: 'none',
                           cursor: 'pointer',
                           textAlign: 'left',
                           width: '100%',
                           color: 'var(--text-primary)',
-                          fontSize: 'var(--fs-p-sm)',
+                          fontSize: 'var(--fs-sm)',
+                          transition: 'background var(--duration-instant) var(--ease-standard)',
                         }}
                       >
                         <div
                           style={{
                             width: 16,
                             height: 16,
-                            borderRadius: 4,
-                            border: `1.5px solid ${selectedOutlets.includes(o.id) ? 'var(--accent)' : 'var(--border-default)'}`,
-                            background: selectedOutlets.includes(o.id) ? 'var(--accent)' : 'transparent',
+                            borderRadius: 3,
+                            border: `1.5px solid ${selectedOutlets.includes(o.id) ? 'var(--text-primary)' : 'var(--border-default)'}`,
+                            background: selectedOutlets.includes(o.id) ? 'var(--text-primary)' : 'transparent',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0,
+                            transition: 'all var(--duration-instant) var(--ease-standard)',
                           }}
                         >
                           {selectedOutlets.includes(o.id) && (
@@ -374,7 +510,14 @@ export default function CampaignsPage() {
                           )}
                         </div>
                         <span>{o.name}</span>
-                        <span style={{ color: 'var(--text-tertiary)', marginLeft: 'auto', fontSize: '11px' }}>{o.niche}</span>
+                        <span style={{
+                          color: 'var(--text-tertiary)',
+                          marginLeft: 'auto',
+                          fontSize: 'var(--fs-xs)',
+                          fontFamily: 'var(--font-mono)',
+                        }}>
+                          {o.niche}
+                        </span>
                       </button>
                     ))
                   )}
@@ -383,14 +526,39 @@ export default function CampaignsPage() {
 
               {/* Niches */}
               <div>
-                <label style={{ display: 'block', fontSize: 'var(--fs-p-sm)', fontWeight: 500, marginBottom: 'var(--space-2)', color: 'var(--text-secondary)' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--fs-xs)',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: 'var(--space-3)',
+                  color: 'var(--text-tertiary)',
+                }}>
                   Target Niches (comma-separated)
                 </label>
-                <input className="input" placeholder="e.g. AI, Developer Tools, SaaS" value={niches} onChange={(e) => setNiches(e.target.value)} />
+                <input
+                  className="input"
+                  placeholder="e.g. AI, Developer Tools, SaaS"
+                  value={niches}
+                  onChange={(e) => setNiches(e.target.value)}
+                />
               </div>
 
-              <div className="flex items-center justify-end" style={{ gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
-                <button className="btn-secondary" onClick={() => setShowCreate(false)}>Cancel</button>
+              {/* Actions */}
+              <div
+                className="flex items-center justify-end"
+                style={{
+                  gap: 'var(--space-3)',
+                  marginTop: 'var(--space-4)',
+                  paddingTop: 'var(--space-5)',
+                  borderTop: '1px solid var(--border-subtle)',
+                }}
+              >
+                <button className="btn-secondary" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </button>
                 <button className="btn-primary" onClick={handleCreate} disabled={!name.trim()}>
                   Create Campaign
                 </button>

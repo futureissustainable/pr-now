@@ -7,7 +7,7 @@ import {
   EnvelopeSimple,
   PaperPlaneTilt,
   Eye,
-  ArrowLeft,
+
   CheckCircle,
   XCircle,
   Clock,
@@ -15,7 +15,6 @@ import {
   CheckSquare,
   User,
   Buildings,
-  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 import type { OutreachEmail, OutreachStatus } from '@/lib/types';
@@ -79,12 +78,15 @@ export default function OutboxPage() {
   return (
     <div style={{ maxWidth: 1200 }}>
       {/* Header */}
-      <div className="flex items-start justify-between animate-in" style={{ marginBottom: 'var(--space-6)' }}>
+      <div
+        className="flex items-start justify-between animate-in"
+        style={{ marginBottom: 'var(--space-8)' }}
+      >
         <div className="section-bordered">
           <div
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '10px',
+              fontSize: 'var(--fs-xs)',
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
@@ -94,10 +96,22 @@ export default function OutboxPage() {
           >
             Email Queue
           </div>
-          <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
+          <h1
+            style={{
+              fontSize: 'var(--fs-4xl)',
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+            }}
+          >
             Outbox
           </h1>
-          <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--space-2)' }}>
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: 'var(--fs-sm)',
+              marginTop: 'var(--space-2)',
+            }}
+          >
             Review and approve emails before they send
           </p>
         </div>
@@ -106,20 +120,34 @@ export default function OutboxPage() {
             className="flex items-center animate-slide-right"
             style={{ gap: 'var(--space-3)' }}
           >
-            <span style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)' }}>
+            <span
+              style={{
+                fontSize: 'var(--fs-sm)',
+                color: 'var(--text-secondary)',
+                fontFamily: 'var(--font-mono)',
+              }}
+            >
               {selectedIds.size} selected
             </span>
             <button
               className="btn-primary"
               onClick={handleBulkApprove}
-              style={{ background: 'var(--success)', fontSize: 'var(--fs-p-sm)' }}
+              style={{
+                background: 'var(--success)',
+                borderColor: 'var(--success)',
+                fontSize: 'var(--fs-sm)',
+              }}
             >
               <Check size={14} weight="bold" /> Approve All
             </button>
             <button
               className="btn-secondary"
               onClick={handleBulkReject}
-              style={{ borderColor: 'var(--error)', color: 'var(--error)', fontSize: 'var(--fs-p-sm)' }}
+              style={{
+                borderColor: 'var(--error)',
+                color: 'var(--error)',
+                fontSize: 'var(--fs-sm)',
+              }}
             >
               <X size={14} weight="bold" /> Reject All
             </button>
@@ -133,7 +161,7 @@ export default function OutboxPage() {
         style={{
           display: 'flex',
           gap: 'var(--space-2)',
-          marginBottom: 'var(--space-4)',
+          marginBottom: 'var(--space-5)',
           flexWrap: 'wrap',
         }}
       >
@@ -148,7 +176,10 @@ export default function OutboxPage() {
             key={tab.id}
             className={filterStatus === tab.id ? 'btn-primary' : 'btn-ghost'}
             onClick={() => setFilterStatus(tab.id)}
-            style={{ fontSize: 'var(--fs-p-sm)', padding: 'var(--space-2) var(--space-4)' }}
+            style={{
+              fontSize: 'var(--fs-sm)',
+              padding: 'var(--space-2) var(--space-4)',
+            }}
           >
             <tab.icon size={14} /> {tab.label} ({tab.count})
           </button>
@@ -158,7 +189,7 @@ export default function OutboxPage() {
       {/* Type filter */}
       <div
         className="flex items-center animate-in stagger-2"
-        style={{ gap: 'var(--space-2)', marginBottom: 'var(--space-6)' }}
+        style={{ gap: 'var(--space-2)', marginBottom: 'var(--space-8)' }}
       >
         <Funnel size={14} style={{ color: 'var(--text-tertiary)' }} />
         {(['all', 'individual', 'publication'] as const).map((t) => (
@@ -166,7 +197,11 @@ export default function OutboxPage() {
             key={t}
             className={filterType === t ? 'btn-secondary' : 'btn-ghost'}
             onClick={() => setFilterType(t)}
-            style={{ fontSize: '12px', padding: 'var(--space-1) var(--space-3)', textTransform: 'capitalize' }}
+            style={{
+              fontSize: 'var(--fs-xs)',
+              padding: 'var(--space-1) var(--space-3)',
+              textTransform: 'capitalize',
+            }}
           >
             {t === 'individual' ? <><User size={12} /> Individual</> :
              t === 'publication' ? <><Buildings size={12} /> Publication</> :
@@ -181,11 +216,21 @@ export default function OutboxPage() {
           className="flex items-center animate-in stagger-2"
           style={{ marginBottom: 'var(--space-4)', gap: 'var(--space-3)' }}
         >
-          <button className="btn-ghost" onClick={selectAll} style={{ fontSize: 'var(--fs-p-sm)' }}>
+          <button
+            className="btn-ghost"
+            onClick={selectAll}
+            style={{ fontSize: 'var(--fs-sm)' }}
+          >
             <CheckSquare size={14} />
             {selectedIds.size === filtered.length ? 'Deselect all' : 'Select all'}
           </button>
-          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
+          <span
+            style={{
+              fontSize: 'var(--fs-xs)',
+              color: 'var(--text-tertiary)',
+              fontFamily: 'var(--font-mono)',
+            }}
+          >
             {filtered.length} email{filtered.length !== 1 ? 's' : ''}
           </span>
         </div>
@@ -196,13 +241,29 @@ export default function OutboxPage() {
         {filtered.length === 0 ? (
           <div
             className="card animate-in stagger-3"
-            style={{ padding: 'var(--space-12)', textAlign: 'center' }}
+            style={{
+              padding: 'var(--space-16) var(--space-12)',
+              textAlign: 'center',
+            }}
           >
-            <EnvelopeSimple size={48} weight="duotone" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }} />
-            <h3 style={{ fontSize: 'var(--fs-p-lg)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+            <EnvelopeSimple
+              size={48}
+              weight="duotone"
+              style={{
+                color: 'var(--text-tertiary)',
+                marginBottom: 'var(--space-4)',
+              }}
+            />
+            <h3
+              style={{
+                fontSize: 'var(--fs-lg)',
+                fontWeight: 600,
+                marginBottom: 'var(--space-2)',
+              }}
+            >
               No emails here
             </h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-p-sm)' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)' }}>
               {filterStatus === 'pending_approval'
                 ? 'All caught up! No emails pending your review.'
                 : 'No emails match your current filters.'}
@@ -257,14 +318,14 @@ function EmailCard({
       className="card animate-in"
       style={{
         animationDelay: `${index * 30}ms`,
-        border: isSelected ? '1px solid var(--accent)' : undefined,
+        ...(isSelected ? { borderColor: 'var(--accent)' } : {}),
       }}
     >
       {/* Header row */}
       <div
         className="flex items-center"
         style={{
-          padding: 'var(--space-4) var(--space-5)',
+          padding: 'var(--space-5) var(--space-6)',
           gap: 'var(--space-4)',
           cursor: 'pointer',
         }}
@@ -276,7 +337,7 @@ function EmailCard({
           style={{
             width: 18,
             height: 18,
-            borderRadius: 4,
+            borderRadius: 3,
             border: `1.5px solid ${isSelected ? 'var(--accent)' : 'var(--border-default)'}`,
             background: isSelected ? 'var(--accent)' : 'transparent',
             display: 'flex',
@@ -315,17 +376,35 @@ function EmailCard({
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>
-            <span style={{ fontWeight: 600, fontSize: 'var(--fs-p-md)' }}>{email.contactName}</span>
-            <DotOutline size={10} weight="fill" style={{ color: 'var(--text-tertiary)' }} />
-            <span style={{ color: 'var(--text-tertiary)', fontSize: '12px' }}>{email.outletName}</span>
+            <span style={{ fontWeight: 600, fontSize: 'var(--fs-md)' }}>
+              {email.contactName}
+            </span>
+            <span
+              style={{
+                color: 'var(--text-tertiary)',
+                fontSize: 'var(--fs-xs)',
+                userSelect: 'none',
+              }}
+            >
+              &middot;
+            </span>
+            <span
+              style={{
+                color: 'var(--text-tertiary)',
+                fontSize: 'var(--fs-xs)',
+              }}
+            >
+              {email.outletName}
+            </span>
           </div>
           <div
             style={{
-              fontSize: 'var(--fs-p-sm)',
+              fontSize: 'var(--fs-sm)',
               color: 'var(--text-secondary)',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
+              marginTop: 2,
             }}
           >
             {email.subject}
@@ -335,7 +414,15 @@ function EmailCard({
         {/* Status + actions */}
         <div className="flex items-center" style={{ gap: 'var(--space-3)', flexShrink: 0 }}>
           {campaignName && (
-            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{campaignName}</span>
+            <span
+              style={{
+                fontSize: 'var(--fs-xs)',
+                color: 'var(--text-tertiary)',
+                fontFamily: 'var(--font-mono)',
+              }}
+            >
+              {campaignName}
+            </span>
           )}
           <StatusBadge status={email.status} />
           {isPending && (
@@ -347,17 +434,25 @@ function EmailCard({
                   width: 32,
                   height: 32,
                   borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--success)',
-                  background: 'var(--success-muted)',
+                  border: '1px solid var(--border-default)',
+                  background: 'transparent',
                   color: 'var(--success)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'all var(--duration-instant) var(--ease-standard)',
+                  transition: 'all var(--duration-fast) var(--ease-standard)',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--success)'; e.currentTarget.style.color = 'var(--text-inverse)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--success-muted)'; e.currentTarget.style.color = 'var(--success)'; }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--success)';
+                  e.currentTarget.style.color = 'var(--text-inverse)';
+                  e.currentTarget.style.borderColor = 'var(--success)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'var(--success)';
+                  e.currentTarget.style.borderColor = 'var(--border-default)';
+                }}
               >
                 <Check size={16} weight="bold" />
               </button>
@@ -368,17 +463,25 @@ function EmailCard({
                   width: 32,
                   height: 32,
                   borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--error)',
-                  background: 'var(--error-muted)',
+                  border: '1px solid var(--border-default)',
+                  background: 'transparent',
                   color: 'var(--error)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'all var(--duration-instant) var(--ease-standard)',
+                  transition: 'all var(--duration-fast) var(--ease-standard)',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--error)'; e.currentTarget.style.color = 'var(--text-inverse)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--error-muted)'; e.currentTarget.style.color = 'var(--error)'; }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--error)';
+                  e.currentTarget.style.color = 'var(--text-inverse)';
+                  e.currentTarget.style.borderColor = 'var(--error)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'var(--error)';
+                  e.currentTarget.style.borderColor = 'var(--border-default)';
+                }}
               >
                 <X size={16} weight="bold" />
               </button>
@@ -395,31 +498,74 @@ function EmailCard({
         <div
           className="animate-fade"
           style={{
-            padding: '0 var(--space-5) var(--space-5)',
+            padding: '0 var(--space-6) var(--space-6)',
             borderTop: '1px solid var(--border-subtle)',
-            marginTop: 0,
           }}
         >
-          <div style={{ paddingTop: 'var(--space-5)' }}>
+          <div style={{ paddingTop: 'var(--space-6)' }}>
             {/* Email metadata */}
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: '80px 1fr',
-                gap: 'var(--space-2)',
-                fontSize: 'var(--fs-p-sm)',
-                marginBottom: 'var(--space-5)',
+                gap: 'var(--space-2) var(--space-4)',
+                fontSize: 'var(--fs-sm)',
+                marginBottom: 'var(--space-6)',
               }}
             >
-              <span style={{ color: 'var(--text-tertiary)', fontWeight: 500 }}>To:</span>
+              <span
+                style={{
+                  color: 'var(--text-tertiary)',
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 'var(--fs-xs)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                To
+              </span>
               <span>{email.contactName} &lt;{email.contactEmail}&gt;</span>
-              <span style={{ color: 'var(--text-tertiary)', fontWeight: 500 }}>Subject:</span>
+              <span
+                style={{
+                  color: 'var(--text-tertiary)',
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 'var(--fs-xs)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                Subject
+              </span>
               <span style={{ fontWeight: 600 }}>{email.subject}</span>
-              <span style={{ color: 'var(--text-tertiary)', fontWeight: 500 }}>Type:</span>
+              <span
+                style={{
+                  color: 'var(--text-tertiary)',
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 'var(--fs-xs)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                Type
+              </span>
               <span style={{ textTransform: 'capitalize' }}>{email.type} pitch</span>
               {email.sentAt && (
                 <>
-                  <span style={{ color: 'var(--text-tertiary)', fontWeight: 500 }}>Sent:</span>
+                  <span
+                    style={{
+                      color: 'var(--text-tertiary)',
+                      fontWeight: 500,
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 'var(--fs-xs)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Sent
+                  </span>
                   <span>{new Date(email.sentAt).toLocaleString()}</span>
                 </>
               )}
@@ -428,11 +574,11 @@ function EmailCard({
             {/* Email body */}
             <div
               style={{
-                padding: 'var(--space-5)',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--bg-surface-raised)',
+                padding: 'var(--space-6)',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--bg-surface)',
                 border: '1px solid var(--border-subtle)',
-                fontSize: 'var(--fs-p-sm)',
+                fontSize: 'var(--fs-sm)',
                 lineHeight: 1.8,
                 whiteSpace: 'pre-wrap',
                 color: 'var(--text-secondary)',
@@ -445,11 +591,12 @@ function EmailCard({
             {email.notes && (
               <div
                 style={{
-                  marginTop: 'var(--space-3)',
+                  marginTop: 'var(--space-4)',
                   padding: 'var(--space-3) var(--space-4)',
                   borderRadius: 'var(--radius-sm)',
                   background: 'var(--warning-muted)',
-                  fontSize: 'var(--fs-p-sm)',
+                  border: '1px solid rgba(176, 125, 30, 0.15)',
+                  fontSize: 'var(--fs-sm)',
                   color: 'var(--warning)',
                 }}
               >
@@ -461,19 +608,30 @@ function EmailCard({
             {isPending && (
               <div
                 className="flex items-center justify-end"
-                style={{ gap: 'var(--space-3)', marginTop: 'var(--space-5)' }}
+                style={{
+                  gap: 'var(--space-3)',
+                  marginTop: 'var(--space-6)',
+                  paddingTop: 'var(--space-5)',
+                  borderTop: '1px solid var(--border-subtle)',
+                }}
               >
                 <button
                   className="btn-secondary"
                   onClick={onReject}
-                  style={{ borderColor: 'var(--error)', color: 'var(--error)' }}
+                  style={{
+                    borderColor: 'var(--error)',
+                    color: 'var(--error)',
+                  }}
                 >
                   <X size={14} weight="bold" /> Reject
                 </button>
                 <button
                   className="btn-primary"
                   onClick={onApprove}
-                  style={{ background: 'var(--success)' }}
+                  style={{
+                    background: 'var(--success)',
+                    borderColor: 'var(--success)',
+                  }}
                 >
                   <Check size={14} weight="bold" /> Approve & Queue
                 </button>

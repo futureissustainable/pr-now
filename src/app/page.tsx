@@ -7,7 +7,6 @@ import {
   CheckCircle,
   ArrowRight,
   CalendarDots,
-  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
@@ -15,18 +14,20 @@ export default function LandingPage() {
   const seedDemoData = useStore((s) => s.seedDemoData);
 
   return (
-    <div className="grain-overlay" style={{ minHeight: '100vh', background: 'var(--linen)' }}>
-      {/* Top bar */}
+    <div style={{ minHeight: '100vh', background: 'var(--linen)' }}>
+      {/* ─── Navigation ─── */}
       <nav
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: 'var(--space-5) var(--space-8)',
-          borderBottom: '2px solid var(--border-strong)',
-          background: 'var(--bg-surface-raised)',
-          position: 'relative',
-          zIndex: 2,
+          borderBottom: '1px solid var(--border-subtle)',
+          background: 'rgba(255,255,255,0.6)',
+          backdropFilter: 'blur(12px)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
         }}
       >
         <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
@@ -41,9 +42,9 @@ export default function LandingPage() {
               borderRadius: 'var(--radius-sm)',
             }}
           >
-            <span style={{ fontFamily: 'var(--font-headline)', fontSize: '16px', color: 'var(--text-inverse)', lineHeight: 1 }}>P</span>
+            <span style={{ fontFamily: 'var(--font-headline)', fontSize: '15px', fontWeight: 800, color: 'var(--text-inverse)', lineHeight: 1 }}>P</span>
           </div>
-          <span style={{ fontFamily: 'var(--font-headline)', fontSize: 'var(--fs-p-lg)', color: 'var(--text-primary)' }}>PR Now</span>
+          <span style={{ fontFamily: 'var(--font-headline)', fontSize: 'var(--fs-lg)', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>PR Now</span>
         </div>
         <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
           <button
@@ -52,101 +53,92 @@ export default function LandingPage() {
               window.location.href = '/dashboard';
             }}
             className="btn-ghost"
-            style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}
+            style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}
           >
             Demo
           </button>
-          <Link href="/setup" className="btn-primary" style={{ fontSize: 'var(--fs-p-sm)' }}>
+          <Link href="/setup" className="btn-primary" style={{ fontSize: 'var(--fs-sm)' }}>
             Get Started <ArrowRight size={14} weight="bold" />
           </Link>
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* ─── Hero ─── */}
       <div
         style={{
-          position: 'relative',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: 'calc(100vh - 160px)',
-          padding: 'var(--space-16) var(--space-4)',
-          overflow: 'hidden',
+          minHeight: 'calc(100vh - 200px)',
+          padding: 'var(--space-20) var(--space-6)',
+          textAlign: 'center',
         }}
       >
-        <div
-          className="animate-in"
-          style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: 720 }}
-        >
-          {/* Mono label with accent underline */}
+        <div style={{ maxWidth: 800 }}>
+          {/* Overline */}
           <div
             className="animate-in stagger-1"
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '11px',
+              fontSize: '10px',
               fontWeight: 700,
               textTransform: 'uppercase',
-              letterSpacing: '0.12em',
+              letterSpacing: '0.14em',
               color: 'var(--accent)',
-              marginBottom: 'var(--space-6)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 'var(--space-3)',
+              marginBottom: 'var(--space-8)',
             }}
           >
-            <span style={{ width: 24, height: 2, background: 'var(--accent)' }} />
             AI-Powered PR Outreach
-            <span style={{ width: 24, height: 2, background: 'var(--accent)' }} />
           </div>
 
+          {/* Main headline */}
           <h1
             className="animate-in stagger-2"
             style={{
               fontFamily: 'var(--font-headline)',
-              fontSize: 'clamp(3rem, 7vw, 5.5rem)',
-              fontWeight: 400,
-              letterSpacing: '-0.02em',
-              lineHeight: 1.0,
-              marginBottom: 'var(--space-8)',
+              fontSize: 'clamp(2.75rem, 6.5vw, var(--fs-7xl))',
+              fontWeight: 800,
+              letterSpacing: '-0.04em',
+              lineHeight: 0.95,
+              marginBottom: 'var(--space-10)',
               color: 'var(--text-primary)',
             }}
           >
-            Get press<br />
-            coverage,{' '}
-            <em style={{
-              fontStyle: 'italic',
-              color: 'var(--accent)',
-              textDecorationLine: 'underline',
-              textDecorationStyle: 'wavy',
-              textDecorationColor: 'rgba(156, 74, 46, 0.3)',
-              textUnderlineOffset: '6px',
-            }}>on autopilot</em>
+            Get press
+            <br />
+            coverage,
+            <br />
+            <span style={{ color: 'var(--accent)' }}>on autopilot</span>
           </h1>
 
+          {/* Accent bar */}
           <div className="accent-bar animate-in stagger-3" style={{ margin: '0 auto var(--space-8)' }} />
 
+          {/* Subheadline */}
           <p
             className="animate-in stagger-3"
             style={{
-              fontSize: 'var(--fs-p-lg)',
+              fontSize: 'var(--fs-lg)',
               color: 'var(--text-secondary)',
-              lineHeight: 1.8,
+              lineHeight: 1.75,
               maxWidth: 520,
-              margin: '0 auto var(--space-10)',
+              margin: '0 auto var(--space-12)',
+              fontWeight: 400,
             }}
           >
             Connect your AI provider, describe your project, and let PR Now
             discover outlets, draft personalized pitches, and manage your entire
-            outreach pipeline. You approve every email before it sends.
+            outreach pipeline.
           </p>
 
+          {/* CTAs */}
           <div
             className="animate-in stagger-4"
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-4)', flexWrap: 'wrap' }}
           >
-            <Link href="/setup" className="btn-primary" style={{ padding: 'var(--space-4) var(--space-8)', fontSize: 'var(--fs-p-md)' }}>
-              Start Outreach <ArrowRight size={16} weight="bold" />
+            <Link href="/setup" className="btn-primary" style={{ padding: '12px var(--space-8)', fontSize: 'var(--fs-md)' }}>
+              Start Outreach <ArrowRight size={15} weight="bold" />
             </Link>
             <button
               onClick={() => {
@@ -154,7 +146,7 @@ export default function LandingPage() {
                 window.location.href = '/dashboard';
               }}
               className="btn-secondary"
-              style={{ padding: 'var(--space-4) var(--space-8)', fontSize: 'var(--fs-p-md)' }}
+              style={{ padding: '12px var(--space-8)', fontSize: 'var(--fs-md)' }}
             >
               View Demo
             </button>
@@ -162,21 +154,18 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Feature strip */}
+      {/* ─── Features Grid ─── */}
       <div
         style={{
-          borderTop: '2px solid var(--border-strong)',
-          borderBottom: '2px solid var(--border-strong)',
+          borderTop: '1px solid var(--border-subtle)',
           background: 'var(--bg-surface-raised)',
-          position: 'relative',
-          zIndex: 1,
         }}
       >
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
-            maxWidth: 1000,
+            maxWidth: 1100,
             margin: '0 auto',
           }}
         >
@@ -190,30 +179,16 @@ export default function LandingPage() {
               key={f.title}
               className="animate-in"
               style={{
-                padding: 'var(--space-8) var(--space-6)',
-                borderLeft: i > 0 ? '2px solid var(--border-strong)' : 'none',
-                animationDelay: `${400 + i * 100}ms`,
+                padding: 'var(--space-10) var(--space-8)',
+                borderLeft: i > 0 ? '1px solid var(--border-subtle)' : 'none',
+                animationDelay: `${400 + i * 80}ms`,
               }}
             >
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--accent-muted)',
-                  border: '1.5px solid var(--accent)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 'var(--space-4)',
-                }}
-              >
-                <f.icon size={20} weight="bold" style={{ color: 'var(--accent)' }} />
-              </div>
-              <h3 style={{ fontSize: 'var(--fs-p-md)', fontWeight: 700, marginBottom: 'var(--space-2)', letterSpacing: '-0.01em' }}>
+              <f.icon size={22} weight="regular" style={{ color: 'var(--accent)', marginBottom: 'var(--space-5)' }} />
+              <h3 style={{ fontFamily: 'var(--font-headline)', fontSize: 'var(--fs-md)', fontWeight: 700, marginBottom: 'var(--space-2)', letterSpacing: '-0.01em' }}>
                 {f.title}
               </h3>
-              <p style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                 {f.desc}
               </p>
             </div>
@@ -221,10 +196,10 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Bottom */}
-      <div style={{ padding: 'var(--space-6)', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+      {/* ─── Footer ─── */}
+      <div style={{ padding: 'var(--space-8)', textAlign: 'center', borderTop: '1px solid var(--border-subtle)' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          Built with Claude, GPT, or Gemini <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> Your API key stays local
+          Powered by Claude, GPT, or Gemini &middot; Your API key stays in your browser
         </span>
       </div>
     </div>

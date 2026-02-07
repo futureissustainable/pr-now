@@ -11,7 +11,7 @@ async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string
       body: JSON.stringify({
         apiKey: config.apiKey,
         authMethod,
-        model: config.model || 'claude-sonnet-4-20250514',
+        model: config.model || 'claude-opus-4-6',
         system: systemPrompt,
         prompt: userPrompt,
       }),

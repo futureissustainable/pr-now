@@ -3,16 +3,13 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  EnvelopeSimple,
   CheckCircle,
   PaperPlaneTilt,
   Newspaper,
   Users,
-  ChartLineUp,
   Clock,
   ArrowRight,
   Lightning,
-  DotOutline,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
@@ -44,24 +41,28 @@ export default function DashboardPage() {
   return (
     <div style={{ maxWidth: 1200 }}>
       {/* Page header */}
-      <div className="animate-in section-bordered" style={{ marginBottom: 'var(--space-8)' }}>
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '10px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            color: 'var(--accent)',
-            marginBottom: 'var(--space-2)',
-          }}
-        >
+      <div className="animate-in section-bordered" style={{ marginBottom: 'var(--space-12)' }}>
+        <div className="section-label" style={{ marginBottom: 'var(--space-3)' }}>
           Overview
         </div>
-        <h1 style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.03em' }}>
+        <h1
+          style={{
+            fontFamily: 'var(--font-headline)',
+            fontSize: 'var(--fs-4xl)',
+            fontWeight: 700,
+            letterSpacing: '-0.03em',
+          }}
+        >
           Dashboard
         </h1>
-        <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--space-2)', fontSize: 'var(--fs-p-md)' }}>
+        <p
+          style={{
+            color: 'var(--text-secondary)',
+            marginTop: 'var(--space-3)',
+            fontSize: 'var(--fs-lg)',
+            lineHeight: 1.5,
+          }}
+        >
           Your outreach pipeline at a glance
         </p>
       </div>
@@ -71,9 +72,9 @@ export default function DashboardPage() {
         className="animate-in stagger-1"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           gap: 'var(--space-4)',
-          marginBottom: 'var(--space-8)',
+          marginBottom: 'var(--space-12)',
         }}
       >
         {[
@@ -84,22 +85,45 @@ export default function DashboardPage() {
           { label: 'Contacts', value: stats.contactsReached, icon: Users, color: 'var(--text-secondary)', bg: 'var(--bg-surface-hover)' },
           { label: 'Active Campaigns', value: stats.activeCampaigns, icon: Lightning, color: 'var(--accent)', bg: 'var(--accent-muted)' },
         ].map((stat) => (
-          <div key={stat.label} className="card" style={{ padding: 'var(--space-5)' }}>
-            <div className="flex items-center" style={{ gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
+          <div
+            key={stat.label}
+            className="card"
+            style={{ padding: 'var(--space-6)' }}
+          >
+            <div
+              className="flex items-center"
+              style={{ gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}
+            >
               <div
                 className="flex items-center justify-center"
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 'var(--radius-md)',
+                  width: 32,
+                  height: 32,
+                  borderRadius: 'var(--radius-sm)',
                   background: stat.bg,
                 }}
               >
-                <stat.icon size={18} weight="duotone" style={{ color: stat.color }} />
+                <stat.icon size={16} weight="duotone" style={{ color: stat.color }} />
               </div>
-              <span style={{ fontSize: 'var(--fs-p-sm)', color: 'var(--text-secondary)' }}>{stat.label}</span>
+              <span
+                style={{
+                  fontSize: 'var(--fs-sm)',
+                  color: 'var(--text-secondary)',
+                  fontWeight: 500,
+                }}
+              >
+                {stat.label}
+              </span>
             </div>
-            <div style={{ fontSize: 'var(--fs-h-lg)', fontWeight: 700, letterSpacing: '-0.02em' }}>
+            <div
+              style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 'var(--fs-3xl)',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                lineHeight: 1,
+              }}
+            >
               {stat.value}
             </div>
           </div>
@@ -115,19 +139,36 @@ export default function DashboardPage() {
         }}
       >
         {/* Recent emails */}
-        <div className="card animate-in stagger-2" style={{ padding: 'var(--space-6)' }}>
+        <div
+          className="card animate-in stagger-2"
+          style={{ padding: 'var(--space-8)' }}
+        >
           <div
             className="flex items-center justify-between"
-            style={{ marginBottom: 'var(--space-5)' }}
+            style={{ marginBottom: 'var(--space-6)' }}
           >
-            <h2 style={{ fontSize: 'var(--fs-p-lg)', fontWeight: 600 }}>Recent Emails</h2>
-            <button onClick={() => router.push('/outbox')} className="btn-ghost" style={{ fontSize: 'var(--fs-p-sm)' }}>
+            <h2
+              style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 'var(--fs-xl)',
+                fontWeight: 600,
+              }}
+            >
+              Recent Emails
+            </h2>
+            <button
+              onClick={() => router.push('/outbox')}
+              className="btn-ghost"
+              style={{ fontSize: 'var(--fs-sm)' }}
+            >
               View all <ArrowRight size={14} />
             </button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             {recentEmails.length === 0 ? (
-              <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-p-sm)' }}>No emails yet. Start a campaign to generate outreach.</p>
+              <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-sm)' }}>
+                No emails yet. Start a campaign to generate outreach.
+              </p>
             ) : (
               recentEmails.map((email) => (
                 <div
@@ -135,27 +176,30 @@ export default function DashboardPage() {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 'var(--space-3)',
-                    padding: 'var(--space-3)',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--bg-surface-raised)',
+                    gap: 'var(--space-4)',
+                    padding: 'var(--space-3) var(--space-4)',
+                    borderRadius: 'var(--radius-sm)',
+                    transition: 'background var(--duration-instant) var(--ease-standard)',
                   }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-surface-hover)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                 >
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div
                       style={{
-                        fontSize: 'var(--fs-p-sm)',
+                        fontSize: 'var(--fs-md)',
                         fontWeight: 500,
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
+                        marginBottom: 2,
                       }}
                     >
                       {email.contactName}
                     </div>
                     <div
                       style={{
-                        fontSize: '12px',
+                        fontSize: 'var(--fs-xs)',
                         color: 'var(--text-tertiary)',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
@@ -173,19 +217,36 @@ export default function DashboardPage() {
         </div>
 
         {/* Active campaigns */}
-        <div className="card animate-in stagger-3" style={{ padding: 'var(--space-6)' }}>
+        <div
+          className="card animate-in stagger-3"
+          style={{ padding: 'var(--space-8)' }}
+        >
           <div
             className="flex items-center justify-between"
-            style={{ marginBottom: 'var(--space-5)' }}
+            style={{ marginBottom: 'var(--space-6)' }}
           >
-            <h2 style={{ fontSize: 'var(--fs-p-lg)', fontWeight: 600 }}>Campaigns</h2>
-            <button onClick={() => router.push('/campaigns')} className="btn-ghost" style={{ fontSize: 'var(--fs-p-sm)' }}>
+            <h2
+              style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 'var(--fs-xl)',
+                fontWeight: 600,
+              }}
+            >
+              Campaigns
+            </h2>
+            <button
+              onClick={() => router.push('/campaigns')}
+              className="btn-ghost"
+              style={{ fontSize: 'var(--fs-sm)' }}
+            >
               View all <ArrowRight size={14} />
             </button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             {campaigns.length === 0 ? (
-              <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-p-sm)' }}>No campaigns yet. Create your first one.</p>
+              <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-sm)' }}>
+                No campaigns yet. Create your first one.
+              </p>
             ) : (
               campaigns.map((c) => (
                 <div
@@ -195,14 +256,24 @@ export default function DashboardPage() {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: 'var(--space-3) var(--space-4)',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--bg-surface-raised)',
+                    borderRadius: 'var(--radius-sm)',
+                    transition: 'background var(--duration-instant) var(--ease-standard)',
                   }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-surface-hover)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                 >
                   <div>
-                    <div style={{ fontSize: 'var(--fs-p-sm)', fontWeight: 500 }}>{c.name}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                      {c.frequency} <DotOutline size={10} weight="fill" style={{ display: 'inline', verticalAlign: 'middle' }} /> {c.targetOutlets.length} outlets
+                    <div style={{ fontSize: 'var(--fs-md)', fontWeight: 500 }}>
+                      {c.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 'var(--fs-xs)',
+                        color: 'var(--text-tertiary)',
+                        marginTop: 2,
+                      }}
+                    >
+                      {c.frequency} &middot; {c.targetOutlets.length} outlets
                     </div>
                   </div>
                   <div className="flex items-center" style={{ gap: 'var(--space-2)' }}>
@@ -213,7 +284,13 @@ export default function DashboardPage() {
                         'status-dot-error'
                       }`}
                     />
-                    <span style={{ fontSize: '12px', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
+                    <span
+                      style={{
+                        fontSize: 'var(--fs-xs)',
+                        color: 'var(--text-secondary)',
+                        textTransform: 'capitalize',
+                      }}
+                    >
                       {c.status}
                     </span>
                   </div>

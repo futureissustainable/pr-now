@@ -84,16 +84,23 @@ export const useStore = create<AppState>()(
       removeOutlet: (id) =>
         set((s) => ({ outlets: s.outlets.filter((o) => o.id !== id) })),
       addDiscoveredOutlets: (outlets) =>
-        set((s) => ({
-          outlets: [
-            ...s.outlets,
-            ...outlets.map((o) => ({ ...o, id: uuid() })),
-          ],
-        })),
+        set((s) => {
+          const existingNames = new Set(s.outlets.map((o) => o.name.toLowerCase()));
+          const newOutlets = outlets
+            .filter((o) => !existingNames.has(o.name.toLowerCase()))
+            .map((o) => ({ ...o, id: uuid() }));
+          return { outlets: [...s.outlets, ...newOutlets] };
+        }),
 
       // Contacts
       addContact: (contact) =>
-        set((s) => ({ contacts: [...s.contacts, { ...contact, id: uuid() }] })),
+        set((s) => {
+          const exists = s.contacts.some(
+            (c) => c.email.toLowerCase() === contact.email.toLowerCase() && c.outletId === contact.outletId
+          );
+          if (exists) return s;
+          return { contacts: [...s.contacts, { ...contact, id: uuid() }] };
+        }),
       removeContact: (id) =>
         set((s) => ({ contacts: s.contacts.filter((c) => c.id !== id) })),
 
@@ -260,7 +267,7 @@ export const useStore = create<AppState>()(
           campaigns,
           emails,
           setupComplete: true,
-          aiConfig: { provider: 'anthropic', apiKey: 'sk-ant-demo-key-xxxxx', model: 'claude-sonnet-4-20250514' },
+          aiConfig: { provider: 'anthropic', apiKey: 'sk-ant-demo-key-xxxxx', authMethod: 'apiKey', model: 'claude-opus-4-6' },
           projectProfile: {
             name: 'PR Now',
             tagline: 'AI-powered media outreach for startups',
