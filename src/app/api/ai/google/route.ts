@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing apiKey or prompt' }, { status: 400 });
   }
 
-  const modelName = model || 'gemini-2.0-flash';
+  const modelName = model || 'gemini-3.0-flash';
   const useOAuth = authMethod === 'oauthToken';
   const url = useOAuth
     ? `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`

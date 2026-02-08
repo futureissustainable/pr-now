@@ -28,7 +28,7 @@ async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string
       body: JSON.stringify({
         apiKey: config.apiKey,
         authMethod,
-        model: config.model || 'gpt-4o',
+        model: config.model || 'gpt-5.2',
         system: systemPrompt,
         prompt: userPrompt,
       }),
@@ -45,7 +45,7 @@ async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string
       body: JSON.stringify({
         apiKey: config.apiKey,
         authMethod,
-        model: config.model || 'gemini-2.0-flash',
+        model: config.model || 'gemini-3.0-flash',
         prompt: `${systemPrompt}\n\n${userPrompt}`,
       }),
     });

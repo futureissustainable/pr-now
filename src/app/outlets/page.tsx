@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Plus,
 
@@ -29,11 +30,18 @@ const typeIcons: Record<string, React.ElementType> = {
 };
 
 export default function OutletsPage() {
+  const router = useRouter();
   const {
-    outlets, contacts, aiConfig, projectProfile,
+    setupComplete, outlets, contacts, aiConfig, projectProfile,
     addOutlet, removeOutlet, addDiscoveredOutlets,
     addContact, removeContact,
   } = useStore();
+
+  useEffect(() => {
+    if (!setupComplete) router.push('/setup');
+  }, [setupComplete, router]);
+
+  if (!setupComplete) return null;
 
   const [discovering, setDiscovering] = useState(false);
   const [findingContacts, setFindingContacts] = useState<string | null>(null);
@@ -435,7 +443,7 @@ export default function OutletsPage() {
             <h2
               style={{
                 fontSize: 'var(--fs-xl)',
-                fontWeight: 600,
+                fontWeight: 400,
                 marginBottom: 'var(--space-6)',
                 letterSpacing: '-0.02em',
               }}

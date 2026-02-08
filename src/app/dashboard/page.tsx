@@ -151,7 +151,7 @@ export default function DashboardPage() {
               style={{
                 fontFamily: 'var(--font-headline)',
                 fontSize: 'var(--fs-xl)',
-                fontWeight: 600,
+                fontWeight: 400,
               }}
             >
               Recent Emails
@@ -229,7 +229,7 @@ export default function DashboardPage() {
               style={{
                 fontFamily: 'var(--font-headline)',
                 fontSize: 'var(--fs-xl)',
-                fontWeight: 600,
+                fontWeight: 400,
               }}
             >
               Campaigns
@@ -315,7 +315,7 @@ function StatusBadge({ status }: { status: string }) {
   };
   return (
     <span className={`badge ${map[status] || 'badge-info'}`}>
-      {status.replace('_', ' ')}
+      {status.replaceAll('_', ' ')}
     </span>
   );
 }
