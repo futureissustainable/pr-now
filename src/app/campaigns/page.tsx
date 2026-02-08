@@ -105,7 +105,7 @@ export default function CampaignsPage() {
           <div className="section-label" style={{ marginBottom: 'var(--space-2)' }}>
             Scheduling
           </div>
-          <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 700, letterSpacing: '-0.03em' }}>
+          <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 400, letterSpacing: '-0.03em' }}>
             Campaigns
           </h1>
           <p style={{
@@ -268,7 +268,7 @@ export default function CampaignsPage() {
                     <div key={s.label} style={{ minWidth: 56 }}>
                       <div style={{
                         fontSize: 'var(--fs-3xl)',
-                        fontWeight: 700,
+                        fontWeight: 400,
                         fontFamily: 'var(--font-headline)',
                         color: s.color,
                         lineHeight: 1.1,
@@ -342,7 +342,7 @@ export default function CampaignsPage() {
               </div>
               <h2 style={{
                 fontSize: 'var(--fs-3xl)',
-                fontWeight: 700,
+                fontWeight: 400,
                 letterSpacing: '-0.02em',
               }}>
                 New Campaign

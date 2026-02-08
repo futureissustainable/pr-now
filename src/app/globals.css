@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
@@ -44,7 +44,7 @@
   --info: #3d5a80;
   --info-muted: rgba(61, 90, 128, 0.06);
 
-  --font-headline: 'Syne', -apple-system, sans-serif;
+  --font-headline: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Space Mono', monospace;
 
@@ -127,8 +127,8 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-headline);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--text-primary);
 }
@@ -292,4 +292,13 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.65; }
 /* Responsive sidebar offset */
 @media (max-width: 1023px) {
   main { margin-left: 0 !important; }
+}
+
+/* Landing page responsive stacking */
+@media (max-width: 767px) {
+  .landing-hero { grid-template-columns: 1fr !important; min-height: auto !important; }
+  .landing-features-grid { grid-template-columns: 1fr !important; }
+  .landing-cta-split { grid-template-columns: 1fr !important; }
+  .landing-features-header { flex-direction: column !important; align-items: flex-start !important; }
+  .landing-features-header p { text-align: left !important; }
 }

@@ -49,7 +49,7 @@ export default function DashboardPage() {
           style={{
             fontFamily: 'var(--font-headline)',
             fontSize: 'var(--fs-4xl)',
-            fontWeight: 700,
+            fontWeight: 400,
             letterSpacing: '-0.03em',
           }}
         >
@@ -119,7 +119,7 @@ export default function DashboardPage() {
               style={{
                 fontFamily: 'var(--font-headline)',
                 fontSize: 'var(--fs-3xl)',
-                fontWeight: 700,
+                fontWeight: 400,
                 letterSpacing: '-0.02em',
                 lineHeight: 1,
               }}

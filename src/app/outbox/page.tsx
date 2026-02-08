@@ -99,7 +99,7 @@ export default function OutboxPage() {
           <h1
             style={{
               fontSize: 'var(--fs-4xl)',
-              fontWeight: 700,
+              fontWeight: 400,
               letterSpacing: '-0.03em',
             }}
           >

@@ -20,8 +20,8 @@ const steps = ['AI Provider', 'Project Details', 'Review'];
 
 const providers: { id: AIProvider; name: string; desc: string; placeholder: string; supportsOAuth: boolean }[] = [
   { id: 'anthropic', name: 'Anthropic (Claude)', desc: 'Claude Opus 4.6, Sonnet 4, Haiku', placeholder: 'sk-ant-api03-...', supportsOAuth: false },
-  { id: 'openai', name: 'OpenAI (GPT)', desc: 'GPT-4o, GPT-4, GPT-3.5', placeholder: 'sk-...', supportsOAuth: true },
-  { id: 'google', name: 'Google (Gemini)', desc: 'Gemini 2.0, 1.5 Pro/Flash', placeholder: 'AIza...', supportsOAuth: true },
+  { id: 'openai', name: 'OpenAI (GPT)', desc: 'GPT-5.2, GPT-4o, GPT-4', placeholder: 'sk-...', supportsOAuth: true },
+  { id: 'google', name: 'Google (Gemini)', desc: 'Gemini 3.0, 2.5 Pro/Flash', placeholder: 'AIza...', supportsOAuth: true },
 ];
 
 export default function SetupPage() {
@@ -75,7 +75,7 @@ export default function SetupPage() {
         <span className="section-label" style={{ display: 'block', marginBottom: 'var(--space-3)' }}>
           Configuration
         </span>
-        <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 'var(--space-2)' }}>
+        <h1 style={{ fontSize: 'var(--fs-4xl)', fontWeight: 400, letterSpacing: '-0.03em', marginBottom: 'var(--space-2)' }}>
           Setup
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-md)', lineHeight: 1.6 }}>
