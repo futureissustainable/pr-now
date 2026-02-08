@@ -344,9 +344,9 @@ export default function LandingPage() {
         >
           <span>Claude Opus 4.6</span>
           <span style={{ color: 'var(--border-default)' }}>&bull;</span>
-          <span>GPT-4o</span>
+          <span>GPT-5.2</span>
           <span style={{ color: 'var(--border-default)' }}>&bull;</span>
-          <span>Gemini 2.0</span>
+          <span>Gemini 3.0</span>
           <span style={{ color: 'var(--border-default)' }}>&bull;</span>
           <span>100% Client-Side</span>
           <span style={{ color: 'var(--border-default)' }}>&bull;</span>

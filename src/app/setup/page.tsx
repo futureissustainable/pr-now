@@ -20,8 +20,8 @@ const steps = ['AI Provider', 'Project Details', 'Review'];
 
 const providers: { id: AIProvider; name: string; desc: string; placeholder: string; supportsOAuth: boolean }[] = [
   { id: 'anthropic', name: 'Anthropic (Claude)', desc: 'Claude Opus 4.6, Sonnet 4, Haiku', placeholder: 'sk-ant-api03-...', supportsOAuth: false },
-  { id: 'openai', name: 'OpenAI (GPT)', desc: 'GPT-4o, GPT-4, GPT-3.5', placeholder: 'sk-...', supportsOAuth: true },
-  { id: 'google', name: 'Google (Gemini)', desc: 'Gemini 2.0, 1.5 Pro/Flash', placeholder: 'AIza...', supportsOAuth: true },
+  { id: 'openai', name: 'OpenAI (GPT)', desc: 'GPT-5.2, GPT-4o, GPT-4', placeholder: 'sk-...', supportsOAuth: true },
+  { id: 'google', name: 'Google (Gemini)', desc: 'Gemini 3.0, 2.5 Pro/Flash', placeholder: 'AIza...', supportsOAuth: true },
 ];
 
 export default function SetupPage() {
