@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Check,
   X,
@@ -22,11 +23,18 @@ import type { OutreachEmail, OutreachStatus } from '@/lib/types';
 type FilterStatus = 'all' | OutreachStatus;
 
 export default function OutboxPage() {
+  const router = useRouter();
   const {
-    emails, campaigns,
+    setupComplete, emails, campaigns,
     approveEmail, rejectEmail,
     bulkApproveEmails, bulkRejectEmails,
   } = useStore();
+
+  useEffect(() => {
+    if (!setupComplete) router.push('/setup');
+  }, [setupComplete, router]);
+
+  if (!setupComplete) return null;
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('pending_approval');
   const [filterType, setFilterType] = useState<'all' | 'individual' | 'publication'>('all');
@@ -257,7 +265,7 @@ export default function OutboxPage() {
             <h3
               style={{
                 fontSize: 'var(--fs-lg)',
-                fontWeight: 600,
+                fontWeight: 400,
                 marginBottom: 'var(--space-2)',
               }}
             >
@@ -655,7 +663,7 @@ function StatusBadge({ status }: { status: string }) {
   };
   return (
     <span className={`badge ${map[status] || 'badge-info'}`}>
-      {status.replace('_', ' ')}
+      {status.replaceAll('_', ' ')}
     </span>
   );
 }

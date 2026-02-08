@@ -144,7 +144,7 @@ export default function SetupPage() {
         {step === 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
             <div>
-              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 400, marginBottom: 'var(--space-2)' }}>
                 Choose your AI provider
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)', lineHeight: 1.6 }}>
@@ -267,7 +267,7 @@ export default function SetupPage() {
         {step === 1 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             <div>
-              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 400, marginBottom: 'var(--space-2)' }}>
                 Tell us about your project
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)', lineHeight: 1.6 }}>
@@ -363,7 +363,7 @@ export default function SetupPage() {
         {step === 2 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
             <div>
-              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+              <h2 style={{ fontSize: 'var(--fs-xl)', fontWeight: 400, marginBottom: 'var(--space-2)' }}>
                 Review & Launch
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)', lineHeight: 1.6 }}>

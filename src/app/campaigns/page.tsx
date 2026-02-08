@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Plus,
   Play,
@@ -25,10 +26,17 @@ const frequencies: { id: CampaignFrequency; label: string; desc: string; icon: R
 ];
 
 export default function CampaignsPage() {
+  const router = useRouter();
   const {
-    campaigns, outlets, contacts, aiConfig, projectProfile,
+    setupComplete, campaigns, outlets, contacts, emails, aiConfig, projectProfile,
     createCampaign, updateCampaignStatus, addEmail,
   } = useStore();
+
+  useEffect(() => {
+    if (!setupComplete) router.push('/setup');
+  }, [setupComplete, router]);
+
+  if (!setupComplete) return null;
 
   const [showCreate, setShowCreate] = useState(false);
   const [name, setName] = useState('');
@@ -139,7 +147,7 @@ export default function CampaignsPage() {
             />
             <h3 style={{
               fontSize: 'var(--fs-xl)',
-              fontWeight: 600,
+              fontWeight: 400,
               marginBottom: 'var(--space-3)',
             }}>
               No campaigns yet
@@ -159,7 +167,7 @@ export default function CampaignsPage() {
           </div>
         ) : (
           campaigns.map((campaign, i) => {
-            const campaignEmails = useStore.getState().emails.filter((e) => e.campaignId === campaign.id);
+            const campaignEmails = emails.filter((e) => e.campaignId === campaign.id);
             const pending = campaignEmails.filter((e) => e.status === 'pending_approval').length;
             const approved = campaignEmails.filter((e) => e.status === 'approved').length;
             const sent = campaignEmails.filter((e) => e.status === 'sent').length;
@@ -185,7 +193,7 @@ export default function CampaignsPage() {
                     >
                       <h3 style={{
                         fontSize: 'var(--fs-xl)',
-                        fontWeight: 600,
+                        fontWeight: 400,
                         letterSpacing: '-0.01em',
                       }}>
                         {campaign.name}
