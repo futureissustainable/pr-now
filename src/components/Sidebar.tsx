@@ -27,13 +27,15 @@ export default function Sidebar() {
 
   return (
     <>
-      <button
-        onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 lg:hidden btn-ghost"
-        aria-label="Toggle sidebar"
-      >
-        <List size={20} weight="bold" />
-      </button>
+      {!sidebarOpen && (
+        <button
+          onClick={toggleSidebar}
+          className="fixed top-4 left-4 z-50 btn-ghost"
+          aria-label="Open sidebar"
+        >
+          <List size={20} weight="bold" />
+        </button>
+      )}
 
       {sidebarOpen && (
         <div
@@ -47,7 +49,7 @@ export default function Sidebar() {
         className={`
           fixed top-0 left-0 z-40 h-screen flex flex-col
           transition-transform duration-300
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
         style={{
           width: 'var(--sidebar-width)',
@@ -96,7 +98,8 @@ export default function Sidebar() {
           </Link>
           <button
             onClick={toggleSidebar}
-            className="btn-ghost lg:hidden"
+            className="btn-ghost"
+            aria-label="Close sidebar"
             style={{ padding: 'var(--space-1)' }}
           >
             <CaretLeft size={16} />

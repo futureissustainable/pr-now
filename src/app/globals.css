@@ -289,9 +289,9 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.65; }
   padding-left: var(--space-5);
 }
 
-/* Responsive sidebar offset */
+/* Responsive sidebar offset — on mobile, sidebar overlays so no margin needed */
 @media (max-width: 1023px) {
-  main { margin-left: 0 !important; }
+  main { margin-left: 0 !important; transition: none !important; }
 }
 
 /* Landing page responsive stacking */
