@@ -261,6 +261,7 @@ export default function SetupPage() {
                 Stored in your browser only. Never sent to our servers.
               </p>
             </div>
+
           </div>
         )}
 
