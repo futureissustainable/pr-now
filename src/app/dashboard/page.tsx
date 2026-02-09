@@ -72,7 +72,7 @@ export default function DashboardPage() {
         className="animate-in stagger-1"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 'var(--space-4)',
           marginBottom: 'var(--space-12)',
         }}
