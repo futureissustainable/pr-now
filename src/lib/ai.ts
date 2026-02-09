@@ -1,7 +1,7 @@
 import type { AIConfig, ProjectProfile, Outlet, Contact, OutreachEmail } from './types';
 
 // AI provider API calls
-async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string): Promise<string> {
+async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string, options?: { useSearch?: boolean }): Promise<string> {
   const authMethod = config.authMethod || 'apiKey';
 
   if (config.provider === 'anthropic') {
@@ -14,6 +14,7 @@ async function callAI(config: AIConfig, systemPrompt: string, userPrompt: string
         model: config.model || 'claude-opus-4-6',
         system: systemPrompt,
         prompt: userPrompt,
+        useSearch: options?.useSearch,
       }),
     });
     if (!res.ok) throw new Error(`Anthropic API error: ${res.status}`);
@@ -86,68 +87,38 @@ Only return the JSON array, no other text.`;
   }
 }
 
-// Search the web using Serper API
-async function searchWeb(searchApiKey: string, query: string): Promise<string> {
-  const res = await fetch('/api/search', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ apiKey: searchApiKey, query }),
-  });
-  if (!res.ok) throw new Error(`Search API error: ${res.status}`);
-  const data = await res.json();
-  const results = data.results;
-
-  // Format search results into a readable string for the AI
-  const organic = results.organic || [];
-  const formatted = organic.map((r: { title?: string; snippet?: string; link?: string }, i: number) =>
-    `[${i + 1}] ${r.title || ''}\n${r.snippet || ''}\nURL: ${r.link || ''}`
-  ).join('\n\n');
-
-  return formatted || 'No search results found.';
-}
-
-// Find contacts at a specific outlet using web search
+// Find contacts at a specific outlet using Claude's built-in web search
 export async function findContacts(
   config: AIConfig,
   profile: ProjectProfile,
   outlet: Outlet
 ): Promise<Omit<Contact, 'id'>[]> {
-  if (!config.searchApiKey) {
-    throw new Error('Search API key required. Add a Serper API key in Setup to find real contacts.');
+  if (config.provider !== 'anthropic') {
+    throw new Error('Contact search requires Anthropic (Claude) as your AI provider — Claude has built-in web search.');
   }
 
-  // Search for journalists/editors at this outlet
-  const queries = [
-    `${outlet.name} journalist editor contact email ${outlet.niche}`,
-    `${outlet.name} staff writers reporters ${profile.category}`,
-  ];
+  const systemPrompt = `You are a PR research assistant. Use web search to find real journalists, editors, and writers at the specified media outlet. Search thoroughly — check the outlet's website, staff pages, LinkedIn, Twitter/X, and masthead. Only include contacts you find from real search results. Do NOT make up or hallucinate any names, emails, or roles. If you cannot find real contacts, return an empty JSON array.`;
 
-  let searchContext = '';
-  for (const q of queries) {
-    const results = await searchWeb(config.searchApiKey, q);
-    searchContext += results + '\n\n';
-  }
+  const userPrompt = `Search the web to find real journalists, editors, and writers at "${outlet.name}" who cover ${outlet.niche || profile.category}.
 
-  const systemPrompt = `You are a PR research assistant. Extract real journalist/editor contact information from web search results. Only include contacts you can verify from the search results — do NOT make up or hallucinate any names, emails, or roles. If you cannot find real contacts, return an empty array. For emails, only include ones that actually appeared in the search results.`;
+Look for:
+- Staff/team pages on ${outlet.url || outlet.name + '.com'}
+- Writer bios and bylines
+- LinkedIn profiles of people who work at ${outlet.name}
+- Twitter/X profiles
 
-  const userPrompt = `I need to find real journalists/editors at ${outlet.name} who cover ${outlet.niche || profile.category}.
-
-Here are web search results:
----
-${searchContext}
----
-
-From ONLY the information in the search results above, extract real contacts. Do NOT invent any details.
-If an email is not visible in the results, set email to an empty string.
-
-Return a JSON array (can be empty if no real contacts found):
+Return a JSON array of real contacts you found (can be empty if none found):
 [{"name": "...", "email": "...", "role": "...", "outlet": "${outlet.name}", "outletId": "${outlet.id}", "beat": "...", "linkedIn": "..."}]
 
+If you can't find an email, set it to an empty string. Do NOT invent details.
 Only return the JSON array, no other text.`;
 
-  const response = await callAI(config, systemPrompt, userPrompt);
+  const response = await callAI(config, systemPrompt, userPrompt, { useSearch: true });
   try {
-    const parsed = JSON.parse(response.replace(/```json?\n?/g, '').replace(/```/g, '').trim());
+    // Extract JSON from response (might have surrounding text from search)
+    const jsonMatch = response.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) return [];
+    const parsed = JSON.parse(jsonMatch[0]);
     return parsed;
   } catch {
     return [];

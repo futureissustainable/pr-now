@@ -74,8 +74,8 @@ export default function OutletsPage() {
 
   const handleFindContacts = async (outlet: Outlet) => {
     if (!aiConfig || !projectProfile) return;
-    if (!aiConfig.searchApiKey) {
-      setContactError('Add a Serper search API key in Setup to find real contacts.');
+    if (aiConfig.provider !== 'anthropic') {
+      setContactError('Contact search requires Anthropic (Claude) — it uses Claude\'s built-in web search.');
       return;
     }
     setFindingContacts(outlet.id);
