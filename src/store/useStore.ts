@@ -27,10 +27,14 @@ interface AppState {
   // UI
   sidebarOpen: boolean;
 
+  // Soul — email style guide
+  emailSoul: string;
+
   // Actions — Setup
   setAIConfig: (config: AIConfig) => void;
   setProjectProfile: (profile: ProjectProfile) => void;
   completeSetup: () => void;
+  setEmailSoul: (soul: string) => void;
 
   // Actions — Outlets
   addOutlet: (outlet: Omit<Outlet, 'id'>) => void;
@@ -73,11 +77,19 @@ export const useStore = create<AppState>()(
       campaigns: [],
       emails: [],
       sidebarOpen: true,
+      emailSoul: `Be concise and direct. No corporate jargon. Write like a real person, not a PR agency.
+Lead with value — why should they care about this story?
+Keep emails under 200 words. Respect their time.
+Warm but professional tone. No exclamation marks. No "I hope this email finds you well".
+When referencing their work, be specific and genuine — don't be generic or sycophantic.
+End with a clear, low-pressure ask (e.g. "would you be open to a quick look?" not "please let me know at your earliest convenience").
+No buzzwords. No "revolutionary", "game-changing", "excited to share". Just say what it does.`,
 
       // Setup
       setAIConfig: (config) => set({ aiConfig: config }),
       setProjectProfile: (profile) => set({ projectProfile: profile }),
       completeSetup: () => set({ setupComplete: true }),
+      setEmailSoul: (soul) => set({ emailSoul: soul }),
 
       // Outlets
       addOutlet: (outlet) =>

@@ -125,14 +125,18 @@ Only return the JSON array, no other text.`;
   }
 }
 
-// Draft outreach email for an individual contact
+// Draft outreach email for an individual contact (uses web search to personalize)
 export async function draftIndividualEmail(
   config: AIConfig,
   profile: ProjectProfile,
   contact: Contact,
-  campaignId: string
+  campaignId: string,
+  emailSoul?: string
 ): Promise<Omit<OutreachEmail, 'id' | 'createdAt'>> {
-  const systemPrompt = `You are a PR copywriter. Draft a personalized, compelling pitch email to a journalist. Be concise, relevant to their beat, and lead with value. Don't be salesy — be human and direct. The email should feel like it was written specifically for this person.`;
+  const soulBlock = emailSoul ? `\n\nIMPORTANT — Follow this style guide (the "Soul") for the email:\n${emailSoul}` : '';
+  const useSearch = config.provider === 'anthropic';
+
+  const systemPrompt = `You are a PR copywriter. Draft a personalized, compelling pitch email to a journalist.${useSearch ? ' First, search the web for their recent articles and coverage to understand what they write about. Reference their actual work naturally in the pitch — show you\'ve done your homework.' : ''} The email should feel like it was written specifically for this person, not a mass blast.${soulBlock}`;
 
   const userPrompt = `Project: ${profile.name}
 Tagline: ${profile.tagline}
@@ -142,13 +146,16 @@ Website: ${profile.website || 'N/A'}
 
 Contact: ${contact.name}, ${contact.role} at ${contact.outlet}
 Their beat: ${contact.beat || 'General'}
+${contact.linkedIn ? `LinkedIn: ${contact.linkedIn}` : ''}
+
+${useSearch ? `Search for recent articles by ${contact.name} at ${contact.outlet} to understand their coverage and personalize the pitch. Reference a specific piece of their work if you find one.` : ''}
 
 Write the pitch email. Return JSON:
 {"subject": "...", "body": "..."}
 
 Only return the JSON, no other text.`;
 
-  const response = await callAI(config, systemPrompt, userPrompt);
+  const response = await callAI(config, systemPrompt, userPrompt, { useSearch });
   try {
     const parsed = JSON.parse(response.replace(/```json?\n?/g, '').replace(/```/g, '').trim());
     return {
@@ -182,9 +189,11 @@ export async function draftPublicationEmail(
   config: AIConfig,
   profile: ProjectProfile,
   outlet: Outlet,
-  campaignId: string
+  campaignId: string,
+  emailSoul?: string
 ): Promise<Omit<OutreachEmail, 'id' | 'createdAt'>> {
-  const systemPrompt = `You are a PR copywriter. Draft a publication-level pitch email. This goes to an editorial team or tips inbox, so it should be more formal and newsworthy than an individual pitch. Focus on the story angle, not just the product. Include data points and a clear hook.`;
+  const soulBlock = emailSoul ? `\n\nIMPORTANT — Follow this style guide (the "Soul") for the email:\n${emailSoul}` : '';
+  const systemPrompt = `You are a PR copywriter. Draft a publication-level pitch email. This goes to an editorial team or tips inbox, so it should be more formal and newsworthy than an individual pitch. Focus on the story angle, not just the product. Include data points and a clear hook.${soulBlock}`;
 
   const userPrompt = `Project: ${profile.name}
 Tagline: ${profile.tagline}

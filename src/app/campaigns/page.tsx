@@ -28,7 +28,7 @@ const frequencies: { id: CampaignFrequency; label: string; desc: string; icon: R
 export default function CampaignsPage() {
   const router = useRouter();
   const {
-    setupComplete, campaigns, outlets, contacts, emails, aiConfig, projectProfile,
+    setupComplete, campaigns, outlets, contacts, emails, aiConfig, projectProfile, emailSoul,
     createCampaign, updateCampaignStatus, addEmail,
   } = useStore();
 
@@ -74,7 +74,7 @@ export default function CampaignsPage() {
       );
 
       for (const contact of targetContacts.slice(0, 5)) {
-        const email = await draftIndividualEmail(aiConfig, projectProfile, contact, campaignId);
+        const email = await draftIndividualEmail(aiConfig, projectProfile, contact, campaignId, emailSoul);
         addEmail(email);
       }
 
@@ -84,7 +84,7 @@ export default function CampaignsPage() {
       );
 
       for (const outlet of targetOutlets.slice(0, 3)) {
-        const email = await draftPublicationEmail(aiConfig, projectProfile, outlet, campaignId);
+        const email = await draftPublicationEmail(aiConfig, projectProfile, outlet, campaignId, emailSoul);
         addEmail(email);
       }
 

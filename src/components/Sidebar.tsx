@@ -10,6 +10,7 @@ import {
   EnvelopeSimple,
   List,
   CaretLeft,
+  PencilSimpleLine,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 
@@ -19,6 +20,7 @@ const navItems = [
   { href: '/outlets', label: 'Outlets', icon: Newspaper },
   { href: '/campaigns', label: 'Campaigns', icon: CalendarDots },
   { href: '/outbox', label: 'Outbox', icon: EnvelopeSimple },
+  { href: '/soul', label: 'Soul', icon: PencilSimpleLine },
 ];
 
 export default function Sidebar() {
