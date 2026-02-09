@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Plus,
-
   Trash,
   Lightning,
   Globe,
@@ -15,7 +14,9 @@ import {
   EnvelopeSimple,
   Spinner,
   Star,
-  UserPlus,
+  Check,
+  X,
+  MagnifyingGlass,
 } from '@phosphor-icons/react';
 import { useStore } from '@/store/useStore';
 import { discoverOutlets, findContacts } from '@/lib/ai';
@@ -33,7 +34,7 @@ export default function OutletsPage() {
   const router = useRouter();
   const {
     setupComplete, outlets, contacts, aiConfig, projectProfile,
-    addOutlet, removeOutlet, addDiscoveredOutlets,
+    addOutlet, removeOutlet, addDiscoveredOutlets, confirmOutlet,
     addContact, removeContact,
   } = useStore();
 
@@ -45,13 +46,14 @@ export default function OutletsPage() {
 
   const [discovering, setDiscovering] = useState(false);
   const [findingContacts, setFindingContacts] = useState<string | null>(null);
+  const [contactError, setContactError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newOutlet, setNewOutlet] = useState({ name: '', type: 'publication' as Outlet['type'], niche: '', url: '' });
   const [filter, setFilter] = useState<'all' | 'picked' | 'discovered'>('all');
 
   const filtered = outlets.filter((o) => {
     if (filter === 'picked') return o.isUserPicked;
-    if (filter === 'discovered') return o.isDiscovered;
+    if (filter === 'discovered') return o.isDiscovered && !o.isUserPicked;
     return true;
   });
 
@@ -72,12 +74,21 @@ export default function OutletsPage() {
 
   const handleFindContacts = async (outlet: Outlet) => {
     if (!aiConfig || !projectProfile) return;
+    if (!aiConfig.searchApiKey) {
+      setContactError('Add a Serper search API key in Setup to find real contacts.');
+      return;
+    }
     setFindingContacts(outlet.id);
+    setContactError(null);
     try {
       const found = await findContacts(aiConfig, projectProfile, outlet);
+      if (found.length === 0) {
+        setContactError(`No contacts found for ${outlet.name} from search results.`);
+      }
       found.forEach((c) => addContact(c));
     } catch (err) {
       console.error('Contact search failed:', err);
+      setContactError(err instanceof Error ? err.message : 'Contact search failed.');
     } finally {
       setFindingContacts(null);
     }
@@ -94,6 +105,8 @@ export default function OutletsPage() {
     setNewOutlet({ name: '', type: 'publication', niche: '', url: '' });
     setShowAddModal(false);
   };
+
+  const discoveredCount = outlets.filter((o) => o.isDiscovered && !o.isUserPicked).length;
 
   return (
     <div style={{ maxWidth: 1200 }}>
@@ -177,11 +190,40 @@ export default function OutletsPage() {
             }}
           >
             {f === 'all' ? `All (${outlets.length})` :
-             f === 'picked' ? `Your picks (${outlets.filter(o => o.isUserPicked).length})` :
-             `Discovered (${outlets.filter(o => o.isDiscovered).length})`}
+             f === 'picked' ? `Your Picks (${outlets.filter(o => o.isUserPicked).length})` :
+             `Discovered (${discoveredCount})`}
           </button>
         ))}
       </div>
+
+      {/* Contact error banner */}
+      {contactError && (
+        <div
+          className="animate-in"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 'var(--space-3)',
+            padding: 'var(--space-4) var(--space-5)',
+            marginBottom: 'var(--space-6)',
+            background: 'var(--warning-muted)',
+            border: '1px solid rgba(176, 125, 30, 0.15)',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: 'var(--fs-sm)',
+            color: 'var(--warning)',
+          }}
+        >
+          <span>{contactError}</span>
+          <button
+            className="btn-ghost"
+            onClick={() => setContactError(null)}
+            style={{ padding: 'var(--space-1)', color: 'var(--warning)' }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
       {/* Outlets grid */}
       <div
@@ -195,6 +237,7 @@ export default function OutletsPage() {
         {filtered.map((outlet, i) => {
           const Icon = typeIcons[outlet.type] || Globe;
           const outletContacts = contacts.filter((c) => c.outletId === outlet.id);
+          const isPicked = outlet.isUserPicked;
 
           return (
             <div
@@ -217,18 +260,18 @@ export default function OutletsPage() {
                       width: 34,
                       height: 34,
                       borderRadius: 'var(--radius-sm)',
-                      background: outlet.isDiscovered ? 'var(--info-muted)' : 'var(--accent-muted)',
+                      background: isPicked ? 'var(--accent-muted)' : 'var(--info-muted)',
                       border: '1px solid',
-                      borderColor: outlet.isDiscovered
-                        ? 'rgba(61, 90, 128, 0.1)'
-                        : 'rgba(156, 74, 46, 0.1)',
+                      borderColor: isPicked
+                        ? 'rgba(156, 74, 46, 0.1)'
+                        : 'rgba(61, 90, 128, 0.1)',
                     }}
                   >
                     <Icon
                       size={16}
                       weight="regular"
                       style={{
-                        color: outlet.isDiscovered ? 'var(--info)' : 'var(--accent)',
+                        color: isPicked ? 'var(--accent)' : 'var(--info)',
                       }}
                     />
                   </div>
@@ -302,13 +345,16 @@ export default function OutletsPage() {
                     {outlet.relevanceScore}%
                   </div>
                 )}
-                {outlet.isDiscovered && (
+                {isPicked && (
+                  <span className="badge badge-accent">Your Pick</span>
+                )}
+                {outlet.isDiscovered && !isPicked && (
                   <span className="badge badge-info">AI Found</span>
                 )}
               </div>
 
-              {/* Contacts for this outlet */}
-              {outletContacts.length > 0 && (
+              {/* Contacts for this outlet (only shown on picked outlets) */}
+              {isPicked && outletContacts.length > 0 && (
                 <div style={{ marginBottom: 'var(--space-4)' }}>
                   <div
                     style={{
@@ -346,6 +392,17 @@ export default function OutletsPage() {
                         >
                           {c.role}
                         </span>
+                        {c.email && (
+                          <span
+                            style={{
+                              color: 'var(--text-tertiary)',
+                              marginLeft: 'var(--space-2)',
+                              fontSize: 'var(--fs-xs)',
+                            }}
+                          >
+                            {c.email}
+                          </span>
+                        )}
                       </div>
                       <button
                         className="btn-ghost"
@@ -359,28 +416,48 @@ export default function OutletsPage() {
                 </div>
               )}
 
-              {/* Find contacts action */}
-              <button
-                className="btn-ghost"
-                onClick={() => handleFindContacts(outlet)}
-                disabled={findingContacts === outlet.id}
-                style={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  fontSize: 'var(--fs-sm)',
-                  padding: 'var(--space-2) var(--space-3)',
-                  borderTop: outletContacts.length === 0 ? '1px solid var(--border-subtle)' : 'none',
-                  borderRadius: outletContacts.length === 0 ? 0 : 'var(--radius-sm)',
-                  paddingTop: outletContacts.length === 0 ? 'var(--space-3)' : undefined,
-                  marginTop: outletContacts.length === 0 ? 'auto' : 0,
-                }}
-              >
-                {findingContacts === outlet.id ? (
-                  <><Spinner size={14} className="animate-spin" /> Finding contacts...</>
-                ) : (
-                  <><UserPlus size={14} /> Find Contacts</>
-                )}
-              </button>
+              {/* Action button: Confirm for discovered, Find Contacts for picked */}
+              {isPicked ? (
+                <button
+                  className="btn-ghost"
+                  onClick={() => handleFindContacts(outlet)}
+                  disabled={findingContacts === outlet.id}
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    fontSize: 'var(--fs-sm)',
+                    padding: 'var(--space-2) var(--space-3)',
+                    borderTop: outletContacts.length === 0 ? '1px solid var(--border-subtle)' : 'none',
+                    borderRadius: outletContacts.length === 0 ? 0 : 'var(--radius-sm)',
+                    paddingTop: outletContacts.length === 0 ? 'var(--space-3)' : undefined,
+                    marginTop: outletContacts.length === 0 ? 'auto' : 0,
+                  }}
+                >
+                  {findingContacts === outlet.id ? (
+                    <><Spinner size={14} className="animate-spin" /> Searching contacts...</>
+                  ) : (
+                    <><MagnifyingGlass size={14} /> Find Contacts</>
+                  )}
+                </button>
+              ) : (
+                <button
+                  className="btn-ghost"
+                  onClick={() => confirmOutlet(outlet.id)}
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    fontSize: 'var(--fs-sm)',
+                    padding: 'var(--space-2) var(--space-3)',
+                    color: 'var(--success)',
+                    borderTop: '1px solid var(--border-subtle)',
+                    borderRadius: 0,
+                    paddingTop: 'var(--space-3)',
+                    marginTop: 'auto',
+                  }}
+                >
+                  <Check size={14} weight="bold" /> Add to Your Picks
+                </button>
+              )}
             </div>
           );
         })}
@@ -400,7 +477,9 @@ export default function OutletsPage() {
         >
           {filter === 'all'
             ? 'No outlets yet. Add one manually or use AI Discover.'
-            : `No ${filter} outlets found.`}
+            : filter === 'picked'
+            ? 'No picked outlets yet. Confirm discovered outlets to add them here.'
+            : 'No discovered outlets. Use AI Discover to find relevant outlets.'}
         </div>
       )}
 

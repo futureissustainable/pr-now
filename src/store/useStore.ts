@@ -36,6 +36,7 @@ interface AppState {
   addOutlet: (outlet: Omit<Outlet, 'id'>) => void;
   removeOutlet: (id: string) => void;
   addDiscoveredOutlets: (outlets: Omit<Outlet, 'id'>[]) => void;
+  confirmOutlet: (id: string) => void;
 
   // Actions — Contacts
   addContact: (contact: Omit<Contact, 'id'>) => void;
@@ -91,6 +92,12 @@ export const useStore = create<AppState>()(
             .map((o) => ({ ...o, id: uuid() }));
           return { outlets: [...s.outlets, ...newOutlets] };
         }),
+
+      // Confirm outlet (move discovered → picked)
+      confirmOutlet: (id) =>
+        set((s) => ({
+          outlets: s.outlets.map((o) => (o.id === id ? { ...o, isUserPicked: true } : o)),
+        })),
 
       // Contacts
       addContact: (contact) =>

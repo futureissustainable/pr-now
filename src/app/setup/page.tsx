@@ -32,6 +32,7 @@ export default function SetupPage() {
   const [provider, setProvider] = useState<AIProvider>(aiConfig?.provider || 'anthropic');
   const [authMethod, setAuthMethod] = useState<AIAuthMethod>(aiConfig?.authMethod || 'apiKey');
   const [apiKey, setApiKey] = useState(aiConfig?.apiKey || '');
+  const [searchApiKey, setSearchApiKey] = useState(aiConfig?.searchApiKey || '');
   const [name, setName] = useState(projectProfile?.name || '');
   const [tagline, setTagline] = useState(projectProfile?.tagline || '');
   const [brief, setBrief] = useState(projectProfile?.brief || '');
@@ -48,7 +49,7 @@ export default function SetupPage() {
   const handleNext = () => {
     if (step === 0) {
       const effectiveAuthMethod = providers.find((p) => p.id === provider)?.supportsOAuth ? authMethod : 'apiKey';
-      setAIConfig({ provider, apiKey, authMethod: effectiveAuthMethod });
+      setAIConfig({ provider, apiKey, authMethod: effectiveAuthMethod, searchApiKey: searchApiKey || undefined });
     }
     if (step === 1) {
       setProjectProfile({
@@ -261,6 +262,33 @@ export default function SetupPage() {
                 Stored in your browser only. Never sent to our servers.
               </p>
             </div>
+
+            <div
+              style={{
+                borderTop: '1px solid var(--border-subtle)',
+                paddingTop: 'var(--space-6)',
+              }}
+            >
+              <label
+                className="label-caps"
+                style={{ display: 'block', marginBottom: 'var(--space-2)' }}
+              >
+                Search API Key (Serper) &mdash; Optional
+              </label>
+              <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-3)', lineHeight: 1.5 }}>
+                Required for finding real journalist contacts via web search. Get a free key at serper.dev (2,500 searches/mo).
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                <Key size={16} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                <input
+                  type="password"
+                  className="input"
+                  placeholder="Serper API key (optional)"
+                  value={searchApiKey}
+                  onChange={(e) => setSearchApiKey(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
         )}
 
@@ -381,6 +409,9 @@ export default function SetupPage() {
                 </div>
                 <div style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)', marginTop: 'var(--space-1)' }}>
                   {authMethod === 'oauthToken' ? 'Token' : 'Key'}: {apiKey.slice(0, 8)}...{apiKey.slice(-4)}
+                </div>
+                <div style={{ fontSize: 'var(--fs-sm)', color: searchApiKey ? 'var(--success)' : 'var(--text-tertiary)', marginTop: 'var(--space-2)' }}>
+                  Search: {searchApiKey ? 'Configured (Serper)' : 'Not configured'}
                 </div>
               </div>
 

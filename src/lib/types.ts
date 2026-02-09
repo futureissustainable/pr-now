@@ -6,6 +6,7 @@ export interface AIConfig {
   apiKey: string;
   authMethod?: AIAuthMethod;
   model?: string;
+  searchApiKey?: string;
 }
 
 export interface ProjectProfile {

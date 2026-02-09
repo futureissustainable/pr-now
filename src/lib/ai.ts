@@ -86,20 +86,62 @@ Only return the JSON array, no other text.`;
   }
 }
 
-// Find contacts at a specific outlet
+// Search the web using Serper API
+async function searchWeb(searchApiKey: string, query: string): Promise<string> {
+  const res = await fetch('/api/search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ apiKey: searchApiKey, query }),
+  });
+  if (!res.ok) throw new Error(`Search API error: ${res.status}`);
+  const data = await res.json();
+  const results = data.results;
+
+  // Format search results into a readable string for the AI
+  const organic = results.organic || [];
+  const formatted = organic.map((r: { title?: string; snippet?: string; link?: string }, i: number) =>
+    `[${i + 1}] ${r.title || ''}\n${r.snippet || ''}\nURL: ${r.link || ''}`
+  ).join('\n\n');
+
+  return formatted || 'No search results found.';
+}
+
+// Find contacts at a specific outlet using web search
 export async function findContacts(
   config: AIConfig,
   profile: ProjectProfile,
   outlet: Outlet
 ): Promise<Omit<Contact, 'id'>[]> {
-  const systemPrompt = `You are a PR research assistant. Given a project and a media outlet, suggest likely journalist contacts who would cover this type of story. Generate realistic but clearly fictional contact details (use .example.com domains for emails). Return JSON array.`;
+  if (!config.searchApiKey) {
+    throw new Error('Search API key required. Add a Serper API key in Setup to find real contacts.');
+  }
 
-  const userPrompt = `Project: ${profile.name} — ${profile.brief}
-Category: ${profile.category}
-Outlet: ${outlet.name} (${outlet.type}, niche: ${outlet.niche})
+  // Search for journalists/editors at this outlet
+  const queries = [
+    `${outlet.name} journalist editor contact email ${outlet.niche}`,
+    `${outlet.name} staff writers reporters ${profile.category}`,
+  ];
 
-Return a JSON array of 2-3 contacts:
-[{"name": "...", "email": "...@example.com", "role": "...", "outlet": "${outlet.name}", "outletId": "${outlet.id}", "beat": "..."}]
+  let searchContext = '';
+  for (const q of queries) {
+    const results = await searchWeb(config.searchApiKey, q);
+    searchContext += results + '\n\n';
+  }
+
+  const systemPrompt = `You are a PR research assistant. Extract real journalist/editor contact information from web search results. Only include contacts you can verify from the search results — do NOT make up or hallucinate any names, emails, or roles. If you cannot find real contacts, return an empty array. For emails, only include ones that actually appeared in the search results.`;
+
+  const userPrompt = `I need to find real journalists/editors at ${outlet.name} who cover ${outlet.niche || profile.category}.
+
+Here are web search results:
+---
+${searchContext}
+---
+
+From ONLY the information in the search results above, extract real contacts. Do NOT invent any details.
+If an email is not visible in the results, set email to an empty string.
+
+Return a JSON array (can be empty if no real contacts found):
+[{"name": "...", "email": "...", "role": "...", "outlet": "${outlet.name}", "outletId": "${outlet.id}", "beat": "...", "linkedIn": "..."}]
 
 Only return the JSON array, no other text.`;
 
